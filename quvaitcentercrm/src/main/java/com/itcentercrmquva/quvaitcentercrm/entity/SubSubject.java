@@ -34,9 +34,8 @@ public class SubSubject {
     private Subjects subject;
 
 
-    @Column(unique = true)
-    private String imagePath;
-
-
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "image", referencedColumnName = "id")
+    private ImageStore imageStore;
 
 }

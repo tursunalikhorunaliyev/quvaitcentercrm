@@ -1,6 +1,7 @@
 package com.itcentercrmquva.quvaitcentercrm.service;
 
 import com.itcentercrmquva.quvaitcentercrm.dto.ResponseResult;
+import com.itcentercrmquva.quvaitcentercrm.entity.ImageStore;
 import com.itcentercrmquva.quvaitcentercrm.entity.SubSubject;
 import com.itcentercrmquva.quvaitcentercrm.entity.Users;
 import com.itcentercrmquva.quvaitcentercrm.repository.SubSubjectRepository;
@@ -11,8 +12,10 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -25,12 +28,13 @@ public class SubSubjectService {
     private UserRepository userRepository;
     private SubjectsRepository subjectsRepository;
 
-    public ResponseEntity<ResponseResult> save(String name, long subjectId, String description, HttpServletRequest request) {
+    public ResponseEntity<ResponseResult> save(String name, long subjectId, String description, MultipartFile file, HttpServletRequest request) throws IOException {
         name = name.trim();
         String token = request.getHeader("Authorization");
         String username = jwtGenerator.getUsernameFromToken(token.substring(7));
         Optional<Users> user = userRepository.findByUsername(username);
         SubSubject subSubjects = new SubSubject();
+        ImageStore imageStore = new ImageStore();
         if (user.isEmpty()) {
             return new ResponseEntity<>(new ResponseResult(false, "Foydalanuvchi topilmadi"), HttpStatus.BAD_REQUEST);
         }
@@ -40,10 +44,13 @@ public class SubSubjectService {
         if (subSubjectRepository.existsByName(name)) {
             return new ResponseEntity<>(new ResponseResult(false, "Ushbu yo'nalish oldin yaratilgan"), HttpStatus.BAD_REQUEST);
         }
+        imageStore.setContent(file.getBytes());
+        imageStore.setFilename(file.getOriginalFilename());
         subSubjects.setName(name.trim());
         subSubjects.setUser(user.get());
         subSubjects.setSubject(subjectsRepository.findById(subjectId).get());
         subSubjects.setDescription(description.trim());
+        subSubjects.setImageStore(imageStore);
         subSubjectRepository.save(subSubjects);
         return new ResponseEntity<>(new ResponseResult(true, "Yo'nalish yaratildi"), HttpStatus.OK);
     }
