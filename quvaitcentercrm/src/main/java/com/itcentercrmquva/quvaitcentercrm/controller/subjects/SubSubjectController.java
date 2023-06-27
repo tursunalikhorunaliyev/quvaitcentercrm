@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
@@ -40,7 +41,6 @@ public class SubSubjectController {
         if (subSubjectRepository.existsByName(name)) {
             return new ResponseEntity<>(new ResponseResult(false, "Ushbu yo'nalish oldin yaratilgan"), HttpStatus.BAD_REQUEST);
         }
-        
         subSubjects.setName(name.trim());
         subSubjects.setUser(user.get());
         subSubjects.setSubject(subjectsRepository.findById(subjectId).get());

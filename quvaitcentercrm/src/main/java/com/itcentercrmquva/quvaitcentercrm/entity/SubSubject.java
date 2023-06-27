@@ -34,4 +34,9 @@ public class SubSubject {
     private Subjects subject;
 
 
+    @Column(unique = true)
+    private String imagePath;
+
+
+
 }
