@@ -44,13 +44,17 @@ public class SubSubjectService {
         if (subSubjectRepository.existsByName(name)) {
             return new ResponseEntity<>(new ResponseResult(false, "Ushbu yo'nalish oldin yaratilgan"), HttpStatus.BAD_REQUEST);
         }
-        imageStore.setContent(file.getBytes());
-        imageStore.setFilename(file.getOriginalFilename());
+
         subSubjects.setName(name.trim());
         subSubjects.setUser(user.get());
         subSubjects.setSubject(subjectsRepository.findById(subjectId).get());
         subSubjects.setDescription(description.trim());
-        subSubjects.setImageStore(imageStore);
+        if(file!=null){
+            imageStore.setContent(file.getBytes());
+            imageStore.setFilename(file.getOriginalFilename());
+            subSubjects.setImageStore(imageStore);
+        }
+
         subSubjectRepository.save(subSubjects);
         return new ResponseEntity<>(new ResponseResult(true, "Yo'nalish yaratildi"), HttpStatus.OK);
     }

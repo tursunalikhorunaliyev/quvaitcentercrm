@@ -19,7 +19,7 @@ public class SubSubjectController {
     private final SubSubjectService subSubjectService;
 
     @PostMapping("save")
-    public ResponseEntity<ResponseResult> save(@RequestParam("name") String name, @RequestParam("subject_id") Long subjectId, @RequestParam("description") String description, @RequestParam("image")MultipartFile image, HttpServletRequest request) throws IOException {
+    public ResponseEntity<ResponseResult> save(@RequestParam("name") String name, @RequestParam("subject_id") Long subjectId, @RequestParam("description") String description, @RequestParam(value = "image", required = false) MultipartFile image, HttpServletRequest request) throws IOException {
         return subSubjectService.save(name, subjectId, description, image, request);
     }
 

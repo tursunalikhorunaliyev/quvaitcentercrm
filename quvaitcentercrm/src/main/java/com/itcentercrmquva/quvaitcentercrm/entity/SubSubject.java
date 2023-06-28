@@ -26,7 +26,7 @@ public class SubSubject {
     public String description;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private Users user;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -35,7 +35,7 @@ public class SubSubject {
 
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "image", referencedColumnName = "id")
+    @JoinColumn(name = "image", referencedColumnName = "id", nullable = true)
     private ImageStore imageStore;
 
 }
