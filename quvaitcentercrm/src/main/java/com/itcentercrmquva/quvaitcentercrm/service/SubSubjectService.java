@@ -1,14 +1,15 @@
 package com.itcentercrmquva.quvaitcentercrm.service;
 
 import com.itcentercrmquva.quvaitcentercrm.dto.ResponseResult;
-import com.itcentercrmquva.quvaitcentercrm.entity.ImageStore;
 import com.itcentercrmquva.quvaitcentercrm.entity.SubSubject;
 import com.itcentercrmquva.quvaitcentercrm.entity.Users;
 import com.itcentercrmquva.quvaitcentercrm.repository.SubSubjectRepository;
-import com.itcentercrmquva.quvaitcentercrm.repository.SubjectsRepository;
 import com.itcentercrmquva.quvaitcentercrm.repository.UserRepository;
 import com.itcentercrmquva.quvaitcentercrm.security.JWTGenerator;
 import lombok.AllArgsConstructor;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.Optional;
 
 @Service
@@ -26,20 +28,15 @@ public class SubSubjectService {
     private SubSubjectRepository subSubjectRepository;
     private JWTGenerator jwtGenerator;
     private UserRepository userRepository;
-    private SubjectsRepository subjectsRepository;
 
-    public ResponseEntity<ResponseResult> save(String name, long subjectId, String description, MultipartFile file, HttpServletRequest request) throws IOException {
+    public ResponseEntity<ResponseResult> save(String name, HttpServletRequest request) throws IOException {
         name = name.trim();
         String token = request.getHeader("Authorization");
         String username = jwtGenerator.getUsernameFromToken(token.substring(7));
         Optional<Users> user = userRepository.findByUsername(username);
         SubSubject subSubjects = new SubSubject();
-        ImageStore imageStore = new ImageStore();
         if (user.isEmpty()) {
             return new ResponseEntity<>(new ResponseResult(false, "Foydalanuvchi topilmadi"), HttpStatus.BAD_REQUEST);
-        }
-        if (subjectsRepository.findById(subjectId).isEmpty()) {
-            return new ResponseEntity<>(new ResponseResult(false, "Tanlangan fan topilmadi"), HttpStatus.BAD_REQUEST);
         }
         if (subSubjectRepository.existsByName(name)) {
             return new ResponseEntity<>(new ResponseResult(false, "Ushbu yo'nalish oldin yaratilgan"), HttpStatus.BAD_REQUEST);
@@ -47,13 +44,6 @@ public class SubSubjectService {
 
         subSubjects.setName(name.trim());
         subSubjects.setUser(user.get());
-        subSubjects.setSubject(subjectsRepository.findById(subjectId).get());
-        subSubjects.setDescription(description.trim());
-        if(file!=null){
-            imageStore.setContent(file.getBytes());
-            imageStore.setFilename(file.getOriginalFilename());
-            subSubjects.setImageStore(imageStore);
-        }
 
         subSubjectRepository.save(subSubjects);
         return new ResponseEntity<>(new ResponseResult(true, "Yo'nalish yaratildi"), HttpStatus.OK);
@@ -61,5 +51,29 @@ public class SubSubjectService {
 
     public ResponseEntity<Collection> getAllSubs() {
         return new ResponseEntity<>(subSubjectRepository.getAllSubSubjects(), HttpStatus.OK);
+    }
+
+    public  ResponseEntity<ResponseResult> readAndSaveFromExcel(MultipartFile file, HttpServletRequest request){
+        try {
+            XSSFWorkbook xssfWorkbook = new XSSFWorkbook(file.getInputStream());
+            XSSFSheet sheet = xssfWorkbook.getSheetAt(0);
+            LinkedList<SubSubject> subjectsList = new LinkedList<>();
+            Optional<Users> user = userRepository.findByUsername(jwtGenerator.getUsernameFromToken(request.getHeader("Authorization").substring(7)));
+            if(user.isEmpty()){
+                return new ResponseEntity<>(new ResponseResult(false, "User topilmadi"), HttpStatus.OK);
+            }
+            for(int i=0; i<sheet.getPhysicalNumberOfRows(); i++){
+                XSSFRow row = sheet.getRow(i);
+                SubSubject subSubjects = new SubSubject();
+                subSubjects.setName(row.getCell(0).toString().trim());
+                subSubjects.setUser(user.get());
+                subjectsList.add(subSubjects);
+            }
+            subSubjectRepository.saveAll(subjectsList);
+            return new ResponseEntity<>(new ResponseResult(true, "Ma'lumotlar saqlandi"), HttpStatus.OK);
+        } catch (IOException e) {
+            return  new ResponseEntity<>(new ResponseResult(false,"Ma;lumotlarni saqlashda xatolik"), HttpStatus.BAD_REQUEST);
+        }
+
     }
 }

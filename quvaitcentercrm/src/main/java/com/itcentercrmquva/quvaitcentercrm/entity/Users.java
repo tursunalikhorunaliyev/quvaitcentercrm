@@ -20,11 +20,11 @@ public class Users {
     @Column(unique = true)
     private String username;
 
-
     @Column
     private String password;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     Set<Roles> roles;
+
 }

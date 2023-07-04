@@ -1,4 +1,4 @@
-package com.itcentercrmquva.quvaitcentercrm.projection;
+package com.itcentercrmquva.quvaitcentercrm.projection.projections;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

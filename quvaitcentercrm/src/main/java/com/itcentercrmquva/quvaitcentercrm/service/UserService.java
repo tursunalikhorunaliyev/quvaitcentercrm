@@ -1,8 +1,10 @@
 package com.itcentercrmquva.quvaitcentercrm.service;
 
 import com.itcentercrmquva.quvaitcentercrm.dto.LoginDTO;
+import com.itcentercrmquva.quvaitcentercrm.entity.Organizations;
 import com.itcentercrmquva.quvaitcentercrm.entity.Roles;
 import com.itcentercrmquva.quvaitcentercrm.entity.Users;
+import com.itcentercrmquva.quvaitcentercrm.repository.OrganizationsRepository;
 import com.itcentercrmquva.quvaitcentercrm.repository.RoleRepository;
 import com.itcentercrmquva.quvaitcentercrm.repository.UserRepository;
 import com.itcentercrmquva.quvaitcentercrm.security.JWTGenerator;
@@ -29,9 +31,12 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final JWTGenerator jwtGenerator;
 
+
     public ResponseEntity<String> register(String username, String password) {
         username = username.trim();
         password = password.trim();
+
+
         if(password.length()<8){
             return  new ResponseEntity<>("Password should be at least 8 character", HttpStatus.BAD_REQUEST);
         }
@@ -45,6 +50,7 @@ public class UserService {
 
         Roles role = roleRepository.findByName("USER").get();
         users.setRoles(Collections.singleton(role));
+
         userRepository.save(users);
 
         return new ResponseEntity<>("User registered successfully", HttpStatus.OK);

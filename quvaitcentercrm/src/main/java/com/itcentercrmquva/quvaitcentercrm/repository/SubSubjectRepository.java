@@ -1,7 +1,7 @@
 package com.itcentercrmquva.quvaitcentercrm.repository;
 
 import com.itcentercrmquva.quvaitcentercrm.entity.SubSubject;
-import com.itcentercrmquva.quvaitcentercrm.projection.SubSubjectProjection;
+import com.itcentercrmquva.quvaitcentercrm.projection.projections.SubSubjectProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

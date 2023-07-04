@@ -1,4 +1,4 @@
-package com.itcentercrmquva.quvaitcentercrm.controller.subjects;
+package com.itcentercrmquva.quvaitcentercrm.controller;
 
 import com.itcentercrmquva.quvaitcentercrm.dto.ResponseResult;
 import com.itcentercrmquva.quvaitcentercrm.service.SubSubjectService;
@@ -19,13 +19,18 @@ public class SubSubjectController {
     private final SubSubjectService subSubjectService;
 
     @PostMapping("save")
-    public ResponseEntity<ResponseResult> save(@RequestParam("name") String name, @RequestParam("subject_id") Long subjectId, @RequestParam("description") String description, @RequestParam(value = "image", required = false) MultipartFile image, HttpServletRequest request) throws IOException {
-        return subSubjectService.save(name, subjectId, description, image, request);
+    public ResponseEntity<ResponseResult> save(@RequestParam("name") String name, HttpServletRequest request) throws IOException {
+        return subSubjectService.save(name, request);
     }
 
     @GetMapping("all")
     public ResponseEntity<Collection> getAllSubs(){
         return subSubjectService.getAllSubs();
+    }
+
+    @PostMapping("excel")
+    public ResponseEntity<ResponseResult> readFromExcel(@RequestParam("excel") MultipartFile file, HttpServletRequest request){
+       return subSubjectService.readAndSaveFromExcel(file, request);
     }
 
 }

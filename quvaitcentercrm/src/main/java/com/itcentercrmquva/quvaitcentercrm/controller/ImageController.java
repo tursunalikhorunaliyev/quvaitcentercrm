@@ -1,4 +1,4 @@
-package com.itcentercrmquva.quvaitcentercrm.controller.image;
+package com.itcentercrmquva.quvaitcentercrm.controller;
 
 
 import com.itcentercrmquva.quvaitcentercrm.repository.ImageStoreRepository;

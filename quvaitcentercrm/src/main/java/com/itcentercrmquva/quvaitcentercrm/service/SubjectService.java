@@ -7,12 +7,18 @@ import com.itcentercrmquva.quvaitcentercrm.repository.SubjectsRepository;
 import com.itcentercrmquva.quvaitcentercrm.repository.UserRepository;
 import com.itcentercrmquva.quvaitcentercrm.security.JWTGenerator;
 import lombok.AllArgsConstructor;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.Optional;
 
 @Service
@@ -44,5 +50,26 @@ public class SubjectService {
 
     public ResponseEntity<Collection> getAllSubject() {
         return new ResponseEntity<>(subjectsRepository.getAllSubjects(), HttpStatus.OK);
+    }
+
+    public ResponseEntity<ResponseResult> readAndSaveFromExcel(MultipartFile file){
+
+        try {
+            XSSFWorkbook xssfWorkbook = new XSSFWorkbook(file.getInputStream());
+            XSSFSheet sheet = xssfWorkbook.getSheetAt(0);
+            LinkedList<Subjects> subjectsList = new LinkedList<>();
+            for(int i=0; i<sheet.getPhysicalNumberOfRows(); i++){
+                XSSFRow row = sheet.getRow(i);
+
+                Subjects subjects = new Subjects();
+                subjects.setName(row.getCell(0).toString().trim());
+                subjectsList.add(subjects);
+            }
+            subjectsRepository.saveAll(subjectsList);
+            return new ResponseEntity<>(new ResponseResult(true, "Ma'lumotlar saqlandi"), HttpStatus.OK);
+        } catch (IOException e) {
+            return  new ResponseEntity<>(new ResponseResult(false,"Ma'lumotlarni saqlashda xatolik"), HttpStatus.BAD_REQUEST);
+        }
+
     }
 }

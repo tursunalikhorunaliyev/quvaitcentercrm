@@ -1,10 +1,13 @@
-package com.itcentercrmquva.quvaitcentercrm.controller.subjects;
+package com.itcentercrmquva.quvaitcentercrm.controller;
 
 import com.itcentercrmquva.quvaitcentercrm.dto.ResponseResult;
 import com.itcentercrmquva.quvaitcentercrm.service.SubjectService;
+import io.swagger.annotations.Api;
 import lombok.AllArgsConstructor;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
@@ -22,7 +25,12 @@ public class SubjectController {
     }
 
     @GetMapping("all")
-    public ResponseEntity<Collection> getAllSubjects(){
+    public ResponseEntity<Collection> getAllSubjects() {
         return subjectService.getAllSubject();
+    }
+
+    @PostMapping("excel")
+    public ResponseEntity<ResponseResult> readFromExcel(@RequestParam("excel") MultipartFile file) {
+        return subjectService.readAndSaveFromExcel(file);
     }
 }
