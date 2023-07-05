@@ -1,5 +1,4 @@
-package com.itcentercrmquva.quvaitcentercrm.projection.projections;
-
+package com.itcentercrmquva.quvaitcentercrm.projection;
 
 import org.springframework.beans.factory.annotation.Value;
 

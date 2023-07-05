@@ -31,8 +31,10 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final JWTGenerator jwtGenerator;
 
+    private OrganizationsRepository organizationsRepository;
 
-    public ResponseEntity<String> register(String username, String password) {
+
+    public ResponseEntity<String> register(String username, String password, Long oId) {
         username = username.trim();
         password = password.trim();
 
@@ -44,9 +46,22 @@ public class UserService {
             return new  ResponseEntity<>("Username already taken", HttpStatus.BAD_REQUEST);
         }
 
+
+
         Users users = new Users();
+
+        Optional<Organizations> organizations = organizationsRepository.findById(oId);
+        if(organizations.isPresent()){
+            users.setOrganization(organizations.get());
+        }
+        else{
+            return new  ResponseEntity<>("Organization not found", HttpStatus.BAD_REQUEST);
+        }
+
         users.setUsername(username);
         users.setPassword(passwordEncoder.encode(password));
+
+
 
         Roles role = roleRepository.findByName("USER").get();
         users.setRoles(Collections.singleton(role));

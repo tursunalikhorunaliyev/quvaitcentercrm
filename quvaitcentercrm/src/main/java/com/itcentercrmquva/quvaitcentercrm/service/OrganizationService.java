@@ -1,14 +1,8 @@
 package com.itcentercrmquva.quvaitcentercrm.service;
-
-import com.itcentercrmquva.quvaitcentercrm.dto.ResponseDataResult;
 import com.itcentercrmquva.quvaitcentercrm.dto.ResponseResult;
-import com.itcentercrmquva.quvaitcentercrm.entity.ImageStore;
-import com.itcentercrmquva.quvaitcentercrm.entity.Organizations;
-import com.itcentercrmquva.quvaitcentercrm.entity.Users;
-import com.itcentercrmquva.quvaitcentercrm.projection.projections.OrganizationProjection;
-import com.itcentercrmquva.quvaitcentercrm.repository.OrganizationsRepository;
-import com.itcentercrmquva.quvaitcentercrm.repository.RoleRepository;
-import com.itcentercrmquva.quvaitcentercrm.repository.UserRepository;
+import com.itcentercrmquva.quvaitcentercrm.entity.*;
+import com.itcentercrmquva.quvaitcentercrm.projection.OrganizationProjection;
+import com.itcentercrmquva.quvaitcentercrm.repository.*;
 import com.itcentercrmquva.quvaitcentercrm.security.JWTGenerator;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,9 +21,11 @@ public class OrganizationService {
 
     private final OrganizationsRepository organizationsRepository;
     private final JWTGenerator jwtGenerator;
-    private final RoleRepository roleRepository;
 
     private final UserRepository userRepository;
+    private final SubjectsRepository subjectsRepository;
+    private final SubSubjectRepository subSubjectRepository;
+    private final OrganizationsSubjectsWithSubSubjectsRepository organizationsSubjectsWithSubSubjectsRepository;
 
     public ResponseEntity<ResponseResult> create(String orgName, String address, String phone1, String phone2, String email, String inn, String gNumber, MultipartFile gPhoto, HttpServletRequest httpRequest) {
 
@@ -37,14 +33,14 @@ public class OrganizationService {
             return new ResponseEntity<>(new ResponseResult(false, "Organizatsiya oldin yaratilgan"), HttpStatus.BAD_REQUEST);
         }
 
-        String username = jwtGenerator.getUsernameFromToken(httpRequest.getHeader("Authorization").substring(7));
+      /*  String username = jwtGenerator.getUsernameFromToken(httpRequest.getHeader("Authorization").substring(7));
         Optional<Users> users = userRepository.findByUsername(username);
         if(users.isEmpty()){
             return new ResponseEntity<>(new ResponseResult(false, "User topilmadi"), HttpStatus.BAD_REQUEST);
         }
        if(!users.get().getRoles().contains(roleRepository.findByName("SUPERADMIN").get())){
            return  new ResponseEntity<>(new ResponseResult(false, "Organizatsiya qo'shish ushbu user uchun cheklangan"), HttpStatus.BAD_REQUEST);
-       }
+       }*/
        if(phone1.trim().length()!=12 || !phone1.trim().startsWith("998")){
          return  new ResponseEntity<>(new ResponseResult(false, "Telefon raqam xato kiriilgan"), HttpStatus.BAD_REQUEST);
        }
@@ -94,4 +90,5 @@ public class OrganizationService {
         return new ResponseEntity<>(organizationsRepository.getAllOrg(), HttpStatus.OK);
 
     }
+
 }

@@ -34,11 +34,12 @@ public class SecurityConfiguration {
                 .authorizeRequests()
                 .antMatchers("/api/auth/**").permitAll()
                 .antMatchers("/api/image/**").permitAll()
-                .antMatchers("/api/subjects/**").permitAll()
+                .antMatchers("/api/org/create").permitAll()
                 .antMatchers(AUTH_WHITELIST).permitAll()
                 .anyRequest()
                 .authenticated().and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().httpBasic().authenticationEntryPoint(new AuthExeptionsEntryPoint());
+        httpSecurity.cors();
         httpSecurity.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }

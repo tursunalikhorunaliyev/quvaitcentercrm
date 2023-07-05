@@ -17,8 +17,8 @@ public class AuthController {
     private final UserService userService;
 
     @PostMapping("register")
-    public ResponseEntity<String> register(@RequestParam("username") String username, @RequestParam("password") String password) {
-        return userService.register(username, password);
+    public ResponseEntity<String> register(@RequestParam("username") String username, @RequestParam("password") String password, @RequestParam("org_id") Long oId) {
+        return userService.register(username, password, oId);
     }
 
     @PostMapping("login")

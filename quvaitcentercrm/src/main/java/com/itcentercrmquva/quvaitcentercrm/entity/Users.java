@@ -27,4 +27,8 @@ public class Users {
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     Set<Roles> roles;
 
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "org_id", referencedColumnName = "id", nullable = false)
+    Organizations organization;
+
 }

@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 
 @Getter
 @Setter
@@ -36,11 +37,13 @@ public class Organizations {
     @Column(nullable = false, unique = true)
     private String gNumber;
 
+
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "image", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "image", referencedColumnName = "id", nullable = false, unique = true)
     private ImageStore gPhoto;
 
-
+    @Column(name = "timestamp", nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    public Timestamp timestamp;
 
 
 }

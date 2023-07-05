@@ -1,7 +1,6 @@
 package com.itcentercrmquva.quvaitcentercrm.controller;
 import com.itcentercrmquva.quvaitcentercrm.dto.ResponseResult;
-import com.itcentercrmquva.quvaitcentercrm.entity.Organizations;
-import com.itcentercrmquva.quvaitcentercrm.projection.projections.OrganizationProjection;
+import com.itcentercrmquva.quvaitcentercrm.projection.OrganizationProjection;
 import com.itcentercrmquva.quvaitcentercrm.service.OrganizationService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -25,4 +24,6 @@ public class OrganizationsController {
     public  ResponseEntity<List<OrganizationProjection>> getAll(){
         return organizationService.allOrg();
     }
+
+
 }

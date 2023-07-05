@@ -1,7 +1,7 @@
 package com.itcentercrmquva.quvaitcentercrm.repository;
 
 import com.itcentercrmquva.quvaitcentercrm.entity.Organizations;
-import com.itcentercrmquva.quvaitcentercrm.projection.projections.OrganizationProjection;
+import com.itcentercrmquva.quvaitcentercrm.projection.OrganizationProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

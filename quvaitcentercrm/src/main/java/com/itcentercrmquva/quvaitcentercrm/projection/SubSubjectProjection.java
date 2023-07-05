@@ -1,7 +1,4 @@
-package com.itcentercrmquva.quvaitcentercrm.projection.projections;
-
-import org.springframework.beans.factory.annotation.Value;
-
+package com.itcentercrmquva.quvaitcentercrm.projection;
 import java.sql.Timestamp;
 
 public interface SubSubjectProjection {

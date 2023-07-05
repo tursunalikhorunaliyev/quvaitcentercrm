@@ -2,9 +2,8 @@ package com.itcentercrmquva.quvaitcentercrm.controller;
 
 import com.itcentercrmquva.quvaitcentercrm.dto.ResponseResult;
 import com.itcentercrmquva.quvaitcentercrm.service.SubjectService;
-import io.swagger.annotations.Api;
 import lombok.AllArgsConstructor;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.commons.collections4.queue.PredicatedQueue;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,7 +29,7 @@ public class SubjectController {
     }
 
     @PostMapping("excel")
-    public ResponseEntity<ResponseResult> readFromExcel(@RequestParam("excel") MultipartFile file) {
-        return subjectService.readAndSaveFromExcel(file);
+    public ResponseEntity<ResponseResult> readFromExcel(@RequestParam("excel") MultipartFile file, HttpServletRequest request) {
+        return subjectService.readAndSaveFromExcel(file, request);
     }
 }
