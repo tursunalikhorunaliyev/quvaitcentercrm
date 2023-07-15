@@ -3,7 +3,6 @@ package com.itcentercrmquva.quvaitcentercrm.service;
 import com.itcentercrmquva.quvaitcentercrm.dto.ResponseResult;
 import com.itcentercrmquva.quvaitcentercrm.entity.EducationLevel;
 import com.itcentercrmquva.quvaitcentercrm.entity.Roles;
-import com.itcentercrmquva.quvaitcentercrm.entity.StuffCategory;
 import com.itcentercrmquva.quvaitcentercrm.entity.Users;
 import com.itcentercrmquva.quvaitcentercrm.repository.EducationLevelRepository;
 import com.itcentercrmquva.quvaitcentercrm.repository.RoleRepository;
@@ -60,6 +59,7 @@ public class EducationLeverService {
                 XSSFRow row = sheet.getRow(i);
                 EducationLevel educationLevel = new EducationLevel();
                 educationLevel.setName(row.getCell(0).toString().trim());
+                educationLevel.setUser(user.get());
                 educationLevelLinkedList.add(educationLevel);
             }
             educationLevelRepository.saveAll(educationLevelLinkedList);

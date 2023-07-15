@@ -58,6 +58,7 @@ public class StuffService {
                 XSSFRow row = sheet.getRow(i);
                 StuffCategory stuffCategory = new StuffCategory();
                 stuffCategory.setName(row.getCell(0).toString().trim());
+                stuffCategory.setUser(user.get());
                 stuffCategoryLinkedList.add(stuffCategory);
             }
             stuffCategoryRepository.saveAll(stuffCategoryLinkedList);
