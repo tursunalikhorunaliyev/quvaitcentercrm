@@ -1,5 +1,5 @@
 package com.itcentercrmquva.quvaitcentercrm.service;
-
+import com.itcentercrmquva.quvaitcentercrm.dto.OrganizationSubjects;
 import com.itcentercrmquva.quvaitcentercrm.dto.ResponseResult;
 import com.itcentercrmquva.quvaitcentercrm.entity.*;
 import com.itcentercrmquva.quvaitcentercrm.projection.OrganizationsSSProjection;
@@ -18,6 +18,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -71,8 +73,23 @@ public class OrganizationsSSService {
         return new ResponseEntity<>(new ResponseResult(true, "Ma'lumotlar saqlandi"), HttpStatus.OK);
     }
 
-    public ResponseEntity<List<OrganizationsSSProjection>> getAllOrganizationsSS(){
+    public ResponseEntity<List<OrganizationsSSProjection>> getAllOrganizationsSS(HttpServletRequest request){
+        String username = jwtGenerator.getUsernameFromToken(request.getHeader("Authorization").substring(7));
+        Optional<Users> user = userRepository.findByUsername(username);
 
-        return new ResponseEntity<>(organizationsSubjectsWithSubSubjectsRepository.getAllOrgSS(), HttpStatus.OK);
+        return new ResponseEntity<>(organizationsSubjectsWithSubSubjectsRepository.findByOrganization(user.get().getOrganization()), HttpStatus.OK);
+    }
+
+    public ResponseEntity<Set<OrganizationSubjects>> getOrgSubjects(HttpServletRequest request){
+        String username = jwtGenerator.getUsernameFromToken(request.getHeader("Authorization").substring(7));
+        Optional<Users> user = userRepository.findByUsername(username);
+        Set<OrganizationSubjects> organizationSubjects = organizationsSubjectsWithSubSubjectsRepository.getOrgSubjects(user.get().getOrganization()).stream().map(e->new OrganizationSubjects(e.getId(), e.getName())).collect(Collectors.toSet());
+        return  new ResponseEntity<>(organizationSubjects, HttpStatus.OK);
+    }
+
+    public ResponseEntity<List<OrganizationsSSProjection>> getAllOrganizationSSBySubject(HttpServletRequest request, Long subId){
+        String username = jwtGenerator.getUsernameFromToken(request.getHeader("Authorization").substring(7));
+        Optional<Users> user = userRepository.findByUsername(username);
+        return new ResponseEntity<>(organizationsSubjectsWithSubSubjectsRepository.findByOrganizationAndSubject_Id(user.get().getOrganization(), subId), HttpStatus.OK);
     }
 }
