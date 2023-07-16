@@ -50,13 +50,12 @@ public class UserService {
 
         Users users = new Users();
 
-        Optional<Organizations> organizations = organizationsRepository.findById(oId);
-        if(organizations.isPresent()){
+        /*Optional<Organizations> organizations = organizationsRepository.findById(oId);
+        if (organizations.isPresent()) {
             users.setOrganization(organizations.get());
-        }
-        else{
-            return new  ResponseEntity<>("Organization not found", HttpStatus.BAD_REQUEST);
-        }
+        } else {
+            return new ResponseEntity<>("Organization not found", HttpStatus.BAD_REQUEST);
+        }*/
 
         users.setUsername(username);
         users.setPassword(passwordEncoder.encode(password));
