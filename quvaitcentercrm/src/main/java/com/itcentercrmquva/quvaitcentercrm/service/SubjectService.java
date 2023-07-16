@@ -81,6 +81,7 @@ public class SubjectService {
                 XSSFRow row = sheet.getRow(i);
                 Subjects subjects = new Subjects();
                 subjects.setName(row.getCell(0).toString().trim());
+                subjects.setUser(user.get());
                 subjectsList.add(subjects);
             }
             subjectsRepository.saveAll(subjectsList);

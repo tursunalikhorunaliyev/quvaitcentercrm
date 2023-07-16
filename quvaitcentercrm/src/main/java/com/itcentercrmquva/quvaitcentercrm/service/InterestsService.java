@@ -60,6 +60,7 @@ public class InterestsService {
                 XSSFRow row = sheet.getRow(i);
                 Interests interests = new Interests();
                 interests.setName(row.getCell(0).toString().trim());
+                interests.setUser(user.get());
                 interestsLinkedList.add(interests);
             }
             interestsRepository.saveAll(interestsLinkedList);
