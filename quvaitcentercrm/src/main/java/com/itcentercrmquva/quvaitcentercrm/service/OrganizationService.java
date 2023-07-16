@@ -33,14 +33,14 @@ public class OrganizationService {
             return new ResponseEntity<>(new ResponseResult(false, "Organizatsiya oldin yaratilgan"), HttpStatus.BAD_REQUEST);
         }
 
-        String username = jwtGenerator.getUsernameFromToken(httpRequest.getHeader("Authorization").substring(7));
+       /* String username = jwtGenerator.getUsernameFromToken(httpRequest.getHeader("Authorization").substring(7));
         Optional<Users> users = userRepository.findByUsername(username);
         if (users.isEmpty()) {
             return new ResponseEntity<>(new ResponseResult(false, "User topilmadi"), HttpStatus.BAD_REQUEST);
         }
         if (!users.get().getRoles().contains(roleRepository.findByName("SUPERADMIN").get())) {
             return new ResponseEntity<>(new ResponseResult(false, "Organizatsiya qo'shish ushbu user uchun cheklangan"), HttpStatus.BAD_REQUEST);
-        }
+        }*/
         if (phone1.trim().length() != 12 || !phone1.trim().startsWith("998")) {
             return new ResponseEntity<>(new ResponseResult(false, "Telefon raqam xato kiriilgan"), HttpStatus.BAD_REQUEST);
         }
@@ -59,7 +59,7 @@ public class OrganizationService {
         ImageStore imageStore = new ImageStore();
         try {
             imageStore.setContent(gPhoto.getBytes());
-            imageStore.setUsers(users.get());
+
         } catch (IOException e) {
             return new ResponseEntity<>(new ResponseResult(false, "Guvohnoma rasmi yuklashda xatolik"), HttpStatus.BAD_REQUEST);
         }
@@ -79,7 +79,7 @@ public class OrganizationService {
         organizations.setINN(inn.trim());
         organizations.setGNumber(gNumber.trim());
         organizations.setGPhoto(imageStore);
-        organizations.setUser(users.get());
+
 
         organizationsRepository.save(organizations);
 
