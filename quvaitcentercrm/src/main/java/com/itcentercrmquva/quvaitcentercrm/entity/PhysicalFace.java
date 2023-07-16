@@ -5,6 +5,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -45,11 +47,18 @@ public class PhysicalFace {
     @Column
     private String instagramUsername;
 
+    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @JoinColumn(name = "photo", referencedColumnName = "id", nullable = false, unique = true)
+    private ImageStore photo;
 
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "e_level", referencedColumnName = "id", nullable = false, unique = true)
     private EducationLevel educationLevel;
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(name = "pyface_interests", joinColumns = @JoinColumn(name = "pyface_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "interest_id", referencedColumnName = "id", nullable = true))
+    private Set<Interests> interests;
 
 
 

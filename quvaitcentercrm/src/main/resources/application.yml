@@ -3,9 +3,9 @@ spring:
     pathmatch:
       matching-strategy: ant_path_matcher
   datasource:
-    url: jdbc:mysql://localhost:3306/dccrm
-    username: happymood
-    password: wtmlopuhfgfdaz1
+    url: jdbc:mysql://localhost:3306/itcentercrm
+    username: itcenter
+    password: itcenteritcenter
 
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
@@ -17,5 +17,3 @@ spring:
     multipart:
       max-file-size:
         20MB
-
-

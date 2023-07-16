@@ -10,4 +10,5 @@ import org.springframework.stereotype.Repository;
 public interface ImageStoreRepository extends JpaRepository<ImageStore, Long> {
     @Query("SELECT s FROM Subjects s")
     ImageStoreProjection getImageStoreData();
+
 }
