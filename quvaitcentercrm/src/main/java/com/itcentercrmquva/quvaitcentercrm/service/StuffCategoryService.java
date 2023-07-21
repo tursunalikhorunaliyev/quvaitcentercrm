@@ -25,20 +25,20 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
-public class StuffService {
+public class StuffCategoryService {
 
     private final StuffCategoryRepository stuffCategoryRepository;
     private final JWTGenerator jwtGenerator;
 
     private final UserRepository userRepository;
 
-    private  final RoleRepository roleRepository;
+    private final RoleRepository roleRepository;
 
-    public ResponseEntity<List<StuffCategory>> getAllStuff(){
+    public ResponseEntity<List<StuffCategory>> getAllStuff() {
         return ResponseEntity.ok(stuffCategoryRepository.findAll());
     }
 
-    public ResponseEntity<ResponseResult> uploadAllStuffCategories(MultipartFile file, HttpServletRequest request){
+    public ResponseEntity<ResponseResult> uploadAllStuffCategories(MultipartFile file, HttpServletRequest request) {
         String token = request.getHeader("Authorization");
         String username = jwtGenerator.getUsernameFromToken(token.substring(7));
         Optional<Users> user = userRepository.findByUsername(username);
@@ -66,6 +66,25 @@ public class StuffService {
         } catch (IOException e) {
             return new ResponseEntity<>(new ResponseResult(false, "Ma'lumotlarni saqlashda xatolik"), HttpStatus.BAD_REQUEST);
         }
+    }
+
+    public ResponseEntity<ResponseResult> save(String name, HttpServletRequest request) {
+
+        Optional<Users> usersOptional = userRepository.findByUsername(jwtGenerator.getUsernameFromToken(request.getHeader("Authorization").substring(7)));
+        if (usersOptional.isEmpty()) {
+            return new ResponseEntity<>(new ResponseResult(false, "User topilmadi"), HttpStatus.BAD_REQUEST);
+        }
+        if (stuffCategoryRepository.existsByName(name.trim())) {
+            return new ResponseEntity<>(new ResponseResult(false, "Ma'lumot oldin yaratilgan"), HttpStatus.BAD_REQUEST);
+        }
+
+        StuffCategory stuffCategory = new StuffCategory();
+        stuffCategory.setName(name.trim());
+        stuffCategory.setUser(usersOptional.get());
+        stuffCategoryRepository.save(stuffCategory);
+
+        return new ResponseEntity<>(new ResponseResult(true, "Ma'lumotlar saqlandi"), HttpStatus.OK);
+
     }
 
 }

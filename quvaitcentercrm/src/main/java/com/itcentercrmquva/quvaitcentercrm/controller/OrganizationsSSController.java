@@ -9,13 +9,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/api/org/ss")
 @AllArgsConstructor
 public class OrganizationsSSController {
-
 
     private final OrganizationsSSService organizationsSSService;
 
@@ -28,7 +26,7 @@ public class OrganizationsSSController {
         return organizationsSSService.getAllOrganizationsSS(request);
     }
     @GetMapping("org-subjects")
-    public ResponseEntity<Set<OrganizationSubjects>> getAllOrgSubjects(HttpServletRequest request){
+    public ResponseEntity<List<OrganizationSubjects>> getAllOrgSubjects(HttpServletRequest request){
         return organizationsSSService.getOrgSubjects(request);
     }
     @GetMapping("ss-by-org")

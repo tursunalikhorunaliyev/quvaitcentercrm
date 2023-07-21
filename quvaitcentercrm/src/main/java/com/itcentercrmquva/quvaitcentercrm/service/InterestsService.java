@@ -1,10 +1,7 @@
 package com.itcentercrmquva.quvaitcentercrm.service;
 
 import com.itcentercrmquva.quvaitcentercrm.dto.ResponseResult;
-import com.itcentercrmquva.quvaitcentercrm.entity.Interests;
-import com.itcentercrmquva.quvaitcentercrm.entity.Roles;
-import com.itcentercrmquva.quvaitcentercrm.entity.Subjects;
-import com.itcentercrmquva.quvaitcentercrm.entity.Users;
+import com.itcentercrmquva.quvaitcentercrm.entity.*;
 import com.itcentercrmquva.quvaitcentercrm.repository.InterestsRepository;
 import com.itcentercrmquva.quvaitcentercrm.repository.RoleRepository;
 import com.itcentercrmquva.quvaitcentercrm.repository.UserRepository;
@@ -68,6 +65,24 @@ public class InterestsService {
         } catch (IOException e) {
             return new ResponseEntity<>(new ResponseResult(false, "Ma'lumotlarni saqlashda xatolik"), HttpStatus.BAD_REQUEST);
         }
+    }
+    public ResponseEntity<ResponseResult> save(String name, HttpServletRequest request) {
+
+        Optional<Users> usersOptional = userRepository.findByUsername(jwtGenerator.getUsernameFromToken(request.getHeader("Authorization").substring(7)));
+        if (usersOptional.isEmpty()) {
+            return new ResponseEntity<>(new ResponseResult(false, "User topilmadi"), HttpStatus.BAD_REQUEST);
+        }
+        if (interestsRepository.existsByName(name.trim())) {
+            return new ResponseEntity<>(new ResponseResult(false, "Ma'lumot oldin yaratilgan"), HttpStatus.BAD_REQUEST);
+        }
+
+        Interests interests = new Interests();
+        interests.setName(name.trim());
+        interests.setUser(usersOptional.get());
+        interestsRepository.save(interests);
+
+        return new ResponseEntity<>(new ResponseResult(true, "Ma'lumotlar saqlandi"), HttpStatus.OK);
+
     }
 
 }

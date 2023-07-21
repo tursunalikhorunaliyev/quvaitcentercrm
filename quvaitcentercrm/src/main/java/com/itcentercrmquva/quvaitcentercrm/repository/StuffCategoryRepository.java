@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface StuffCategoryRepository extends JpaRepository<StuffCategory, Long> {
+    boolean existsByName(String name);
 }

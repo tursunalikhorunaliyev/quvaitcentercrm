@@ -16,9 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -80,10 +78,11 @@ public class OrganizationsSSService {
         return new ResponseEntity<>(organizationsSubjectsWithSubSubjectsRepository.findByOrganization(user.get().getOrganization()), HttpStatus.OK);
     }
 
-    public ResponseEntity<Set<OrganizationSubjects>> getOrgSubjects(HttpServletRequest request){
+    public ResponseEntity<List<OrganizationSubjects>> getOrgSubjects(HttpServletRequest request){
         String username = jwtGenerator.getUsernameFromToken(request.getHeader("Authorization").substring(7));
         Optional<Users> user = userRepository.findByUsername(username);
-        Set<OrganizationSubjects> organizationSubjects = organizationsSubjectsWithSubSubjectsRepository.getOrgSubjects(user.get().getOrganization()).stream().map(e->new OrganizationSubjects(e.getId(), e.getName())).collect(Collectors.toSet());
+        List<OrganizationSubjects> organizationSubjects = organizationsSubjectsWithSubSubjectsRepository.getOrgSubjects(user.get().getOrganization()).stream().map(e->new OrganizationSubjects(e.getId(), e.getName())).collect(Collectors.toList());
+        organizationSubjects.sort(Comparator.comparing(OrganizationSubjects::getId));
         return  new ResponseEntity<>(organizationSubjects, HttpStatus.OK);
     }
 
@@ -92,4 +91,5 @@ public class OrganizationsSSService {
         Optional<Users> user = userRepository.findByUsername(username);
         return new ResponseEntity<>(organizationsSubjectsWithSubSubjectsRepository.findByOrganizationAndSubject_Id(user.get().getOrganization(), subId), HttpStatus.OK);
     }
+
 }

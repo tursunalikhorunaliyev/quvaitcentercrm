@@ -88,7 +88,6 @@ public class OrganizationService {
 
     public ResponseEntity<List<OrganizationProjection>> allOrg() {
         return new ResponseEntity<>(organizationsRepository.getAllOrg(), HttpStatus.OK);
-
     }
 
 }

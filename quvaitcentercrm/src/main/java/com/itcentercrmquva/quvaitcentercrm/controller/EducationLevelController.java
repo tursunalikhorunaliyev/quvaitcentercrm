@@ -26,5 +26,10 @@ public class EducationLevelController {
     public ResponseEntity<ResponseResult> upload(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
         return educationLeverService.uploadAllEducationLevels(file, request);
     }
+
+    @PostMapping("save")
+    public ResponseEntity<ResponseResult> save(@RequestParam("name") String name, HttpServletRequest request) {
+        return educationLeverService.save(name, request);
+    }
 }
 

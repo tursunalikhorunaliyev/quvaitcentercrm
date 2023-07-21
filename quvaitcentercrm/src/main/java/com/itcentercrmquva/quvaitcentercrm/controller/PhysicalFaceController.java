@@ -1,32 +1,50 @@
 package com.itcentercrmquva.quvaitcentercrm.controller;
 
 import com.itcentercrmquva.quvaitcentercrm.dto.ResponseResult;
+import com.itcentercrmquva.quvaitcentercrm.projection.PhysicalFaceProjection;
+import com.itcentercrmquva.quvaitcentercrm.service.PhysicalFaceService;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDate;
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/physical-face/")
+@AllArgsConstructor
 public class PhysicalFaceController {
+
+    private final PhysicalFaceService physicalFaceService;
+
 
     @PostMapping("create")
     public ResponseEntity<ResponseResult> create(@RequestParam("firstname") String firstname,
                                                  @RequestParam("lastname") String lastname,
-                                                 @RequestParam("middlename") String middlename,
-                                                 @RequestParam("birthday") LocalDate birthday,
-                                                 @RequestParam("identificator") String identificator,
+                                                 @RequestParam(value = "middleName", required = false) String middleName,
+                                                 @RequestParam("birthday") String birthday,
+                                                 @RequestParam("identification") String identification,
                                                  @RequestParam("address") String address,
                                                  @RequestParam("phone1") String primaryPhone,
-                                                 @RequestParam("phone2") String secondaryPhone,
-                                                 @RequestParam("telegram") String telegram,
-                                                 @RequestParam("instagram") String instagram,
-                                                 @RequestParam("e_level") Long id,
-                                                 @RequestParam("interests") String interests){
-        return  ResponseEntity.ok(new ResponseResult(false, "Not implemented yet"));
+                                                 @RequestParam(value = "phone2", required = false) String secondaryPhone,
+                                                 @RequestParam(value = "telegram",required = false) String telegram,
+                                                 @RequestParam(value = "instagram", required = false) String instagram,
+                                                 @RequestParam("e_level") Long eLevelId,
+                                                 @RequestParam(value = "interests", required = false) String interests,
+                                                 @RequestParam("photo") MultipartFile photo,
+                                                 HttpServletRequest request){
+        return  physicalFaceService.create(firstname, lastname, middleName, birthday, identification, address, primaryPhone, secondaryPhone, telegram, instagram, eLevelId, interests, photo, request);
+    }
+
+    @GetMapping("all")
+    public ResponseEntity<List<PhysicalFaceProjection>> getAll(HttpServletRequest request){
+        return  physicalFaceService.getAll(request);
+    }
+
+    @GetMapping("single")
+    public  ResponseEntity<Object> getById(@RequestParam("pId") Long id){
+       return physicalFaceService.getById(id);
     }
 
 }

@@ -74,7 +74,7 @@ public class UserService {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = jwtGenerator.generateToken(authentication);
-        return  new ResponseEntity<>(new LoginDTO("User successfuly logged in",token), HttpStatus.OK);
+        return new ResponseEntity<>(new LoginDTO("User successfuly logged in",token), HttpStatus.OK);
     }
 
 }

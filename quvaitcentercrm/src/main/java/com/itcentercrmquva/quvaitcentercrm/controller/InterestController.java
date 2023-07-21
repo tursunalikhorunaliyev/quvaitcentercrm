@@ -18,11 +18,17 @@ public class InterestController {
     private final InterestsService interestsService;
 
     @GetMapping("api")
-    public ResponseEntity<List<Interests>> all(){
+    public ResponseEntity<List<Interests>> all() {
         return interestsService.getAllInterests();
     }
+
     @PostMapping("upload")
-    public ResponseEntity<ResponseResult> upload(@RequestParam("file") MultipartFile file, HttpServletRequest request){
+    public ResponseEntity<ResponseResult> upload(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
         return interestsService.uploadAllInterests(file, request);
+    }
+
+    @PostMapping("save")
+    public ResponseEntity<ResponseResult> save(@RequestParam("name") String name, HttpServletRequest request) {
+        return interestsService.save(name, request);
     }
 }

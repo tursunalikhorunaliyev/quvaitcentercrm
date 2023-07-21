@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 @Repository
 public interface OrganizationsSubjectsWithSubSubjectsRepository extends JpaRepository<OrganizationsSubjectsWithSubSubjects, Long> {
@@ -28,7 +29,7 @@ public interface OrganizationsSubjectsWithSubSubjectsRepository extends JpaRepos
     @Query("""
             select o.subject from OrganizationsSubjectsWithSubSubjects o
             where o.organization = ?1 group by o.subject""")
-    Set<Subjects> getOrgSubjects(Organizations organizations);
+    List<Subjects> getOrgSubjects(Organizations organizations);
 
 
 
