@@ -8,7 +8,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @SpringBootApplication
 public class QuvaitcentercrmApplication {
-
 	public static void main(String[] args) {
 		SpringApplication.run(QuvaitcentercrmApplication.class, args);
 	}

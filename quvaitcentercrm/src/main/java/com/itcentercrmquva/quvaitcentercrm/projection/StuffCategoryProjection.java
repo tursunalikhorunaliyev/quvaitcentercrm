@@ -4,6 +4,5 @@ import java.sql.Timestamp;
 
 public interface StuffCategoryProjection {
     Long getId();
-
     String getName();
 }

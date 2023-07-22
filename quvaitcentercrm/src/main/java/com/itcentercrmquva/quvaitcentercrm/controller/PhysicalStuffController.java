@@ -3,10 +3,8 @@ package com.itcentercrmquva.quvaitcentercrm.controller;
 import com.itcentercrmquva.quvaitcentercrm.dto.ResponseResult;
 import com.itcentercrmquva.quvaitcentercrm.projection.PhysicalStuffByCategoryProjection;
 import com.itcentercrmquva.quvaitcentercrm.projection.PhysicalStuffProjection;
-import com.itcentercrmquva.quvaitcentercrm.service.PhysicalFaceService;
 import com.itcentercrmquva.quvaitcentercrm.service.PhysicalStuffService;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,10 +38,11 @@ public class PhysicalStuffController {
         return physicalStuffService.getAllByOrgAndStuff(request, cid);
     }
 
-   /* @GetMapping("categories")
+    @GetMapping("categories")
     public ResponseEntity<List<PhysicalStuffByCategoryProjection>> getAllPSByCategory(HttpServletRequest request){
         return physicalStuffService.getPSByCategory(request);
-    }*/
+    }
+
 
 
 }

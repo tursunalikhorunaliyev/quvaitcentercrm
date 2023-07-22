@@ -77,8 +77,8 @@ public class PhysicalStuffService {
          Optional<Users> usersOptional = userRepository.findByUsername(jwtGenerator.getUsernameFromToken(request.getHeader("Authorization").substring(7)));
          return ResponseEntity.ok(physicalStuffRepository.findByOrganizationsAndStuffCategory_Id(usersOptional.get().getOrganization(), cid));
      }
-     /*public ResponseEntity<List<PhysicalStuffByCategoryProjection>> getPSByCategory(HttpServletRequest request){
+     public ResponseEntity<List<PhysicalStuffByCategoryProjection>> getPSByCategory(HttpServletRequest request){
          Optional<Users> usersOptional = userRepository.findByUsername(jwtGenerator.getUsernameFromToken(request.getHeader("Authorization").substring(7)));
         return  ResponseEntity.ok(physicalStuffRepository.getPSbyCategory(usersOptional.get().getOrganization()));
-     }*/
+     }
 }

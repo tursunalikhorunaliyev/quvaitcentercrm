@@ -34,6 +34,7 @@ public class PhysicalFaceController {
                                                  @RequestParam(value = "interests", required = false) String interests,
                                                  @RequestParam("photo") MultipartFile photo,
                                                  HttpServletRequest request){
+        System.out.println(birthday);
         return  physicalFaceService.create(firstname, lastname, middleName, birthday, identification, address, primaryPhone, secondaryPhone, telegram, instagram, eLevelId, interests, photo, request);
     }
 

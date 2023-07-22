@@ -21,7 +21,7 @@ public class PhysicalStuff {
     @JoinColumn(name = "physical_face_id", referencedColumnName = "id")
     PhysicalFace physicalFace;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     StuffCategory stuffCategory;
 
     @Column(nullable = false)
@@ -38,7 +38,7 @@ public class PhysicalStuff {
     private Users user;
 
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "org_id", referencedColumnName = "id")
     private Organizations organizations;
 

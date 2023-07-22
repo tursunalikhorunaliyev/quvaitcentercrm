@@ -92,12 +92,11 @@ public class PhysicalFaceService {
             return new ResponseEntity<>(new ResponseResult(false, "Educational level topilmadi"), HttpStatus.BAD_REQUEST);
         }
 
-
         PhysicalFace physicalFace = new PhysicalFace();
         physicalFace.setFirstName(firstname);
         physicalFace.setLastName(lastname);
         physicalFace.setAddress(address);
-        physicalFace.setBirthday(LocalDate.of(birthdayInt[2], birthdayInt[1], birthdayInt[0]));
+        physicalFace.setBirthday(LocalDate.of(birthdayInt[0], birthdayInt[1], birthdayInt[2]));
         physicalFace.setPersonalIdentification(identification);
         physicalFace.setPrimaryPhone(primaryPhone);
         physicalFace.setEducationLevel(educationLevel.get());
