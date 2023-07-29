@@ -1,15 +1,13 @@
 package com.itcentercrmquva.quvaitcentercrm.controller;
-
 import com.itcentercrmquva.quvaitcentercrm.dto.ResponseResult;
-import com.itcentercrmquva.quvaitcentercrm.entity.Interests;
+import com.itcentercrmquva.quvaitcentercrm.projection.InterestsProjection;
 import com.itcentercrmquva.quvaitcentercrm.service.InterestsService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("api/interests/")
@@ -17,8 +15,8 @@ import java.util.List;
 public class InterestController {
     private final InterestsService interestsService;
 
-    @GetMapping("api")
-    public ResponseEntity<List<Interests>> all() {
+    @GetMapping("all")
+    public ResponseEntity<Set<InterestsProjection>> all() {
         return interestsService.getAllInterests();
     }
 

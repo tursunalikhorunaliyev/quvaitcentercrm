@@ -13,7 +13,7 @@ public interface OrganizationProjection {
     String getEmail();
     String getINN();
     String getGNumber();
-    @Value("http://localhost:8080/api/image/get?id=#{target.gPhoto.id}")
+    @Value("http://192.168.1.3:8080/api/image/get?id=#{target.gPhoto.id}")
     String getImage();
 
 }

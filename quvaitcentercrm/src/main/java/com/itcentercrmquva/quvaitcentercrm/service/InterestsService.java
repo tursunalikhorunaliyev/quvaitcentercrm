@@ -1,7 +1,7 @@
 package com.itcentercrmquva.quvaitcentercrm.service;
-
 import com.itcentercrmquva.quvaitcentercrm.dto.ResponseResult;
 import com.itcentercrmquva.quvaitcentercrm.entity.*;
+import com.itcentercrmquva.quvaitcentercrm.projection.InterestsProjection;
 import com.itcentercrmquva.quvaitcentercrm.repository.InterestsRepository;
 import com.itcentercrmquva.quvaitcentercrm.repository.RoleRepository;
 import com.itcentercrmquva.quvaitcentercrm.repository.UserRepository;
@@ -14,13 +14,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
-import javax.management.relation.Role;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @AllArgsConstructor
@@ -33,8 +31,8 @@ public class InterestsService {
 
     private  final RoleRepository roleRepository;
 
-    public ResponseEntity<List<Interests>> getAllInterests(){
-        return ResponseEntity.ok(interestsRepository.findAll());
+    public ResponseEntity<Set<InterestsProjection>> getAllInterests(){
+        return ResponseEntity.ok(interestsRepository.findAllInterestsByJPQL());
     }
 
     public ResponseEntity<ResponseResult> uploadAllInterests(MultipartFile file, HttpServletRequest request){
