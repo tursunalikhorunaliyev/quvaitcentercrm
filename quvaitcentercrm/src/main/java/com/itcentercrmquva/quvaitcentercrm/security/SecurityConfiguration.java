@@ -24,7 +24,7 @@ public class SecurityConfiguration {
             "/swagger-ui.html",
             "/v2/api-docs",
             "/webjars/**",
-            "/swagger-ui/**"
+            "/swagger-ui/**",
     };
 
     @Bean
@@ -32,6 +32,10 @@ public class SecurityConfiguration {
         httpSecurity.csrf().disable().exceptionHandling()
                 .and()
                 .authorizeRequests()
+                .antMatchers("/netflex/**").permitAll()
+                .antMatchers("/resources/**").permitAll()
+                .antMatchers("/index.html", "/", "/home", "/public/**","/images/**",
+                        "/login","/favicon.ico","/*.js","/*.js.map").permitAll()
                 .antMatchers("/api/auth/**").permitAll()
                 .antMatchers("/api/image/**").permitAll()
                 .antMatchers("/api/org/create").permitAll()

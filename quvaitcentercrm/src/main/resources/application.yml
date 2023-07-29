@@ -1,11 +1,14 @@
 spring:
   mvc:
-    pathmatch:
+    view:
+      suffix: html
+    path match:
       matching-strategy: ant_path_matcher
   datasource:
     url: jdbc:mysql://localhost:3306/itcentercrm
     username: itcenter
-    password: itcenteritcenter
+    password: itcenteritcenter1
+
 
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect

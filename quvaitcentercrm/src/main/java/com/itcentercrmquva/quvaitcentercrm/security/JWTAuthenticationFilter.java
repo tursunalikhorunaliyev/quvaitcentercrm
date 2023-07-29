@@ -24,11 +24,12 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
     private JWTGenerator jwtGenerator;
 
     private CustomUserDetailsService customUserDetailsService;
-
+    
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = getTokenFromRequest(request);
-        if (jwtGenerator.validateToken(token) ) {
+        if (jwtGenerator.validateToken(token)) {
+            assert token != null;
             String username = jwtGenerator.getUsernameFromToken(token);
             UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
@@ -46,16 +47,28 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
             return null;
         }
     }
+
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         return new AntPathMatcher().match("/api/auth/**", request.getServletPath())
+                || new AntPathMatcher().match("/netflex/**", request.getServletPath())
+                || new AntPathMatcher().match("/resources/**", request.getServletPath())
+                || new AntPathMatcher().match("/index.html", request.getServletPath())
+                || new AntPathMatcher().match("/", request.getServletPath())
+                || new AntPathMatcher().match("/public/**", request.getServletPath())
+                || new AntPathMatcher().match("/images/**", request.getServletPath())
+                || new AntPathMatcher().match("/home", request.getServletPath())
+                || new AntPathMatcher().match("/login", request.getServletPath())
+                || new AntPathMatcher().match("/favicon.ico", request.getServletPath())
+                || new AntPathMatcher().match("/*.js", request.getServletPath())
+                || new AntPathMatcher().match("/*.js.map", request.getServletPath())
                 || new AntPathMatcher().match("/api/image/**", request.getServletPath())
                 || new AntPathMatcher().match("/api/org/create", request.getServletPath())
                 || new AntPathMatcher().match("/swagger-resources/**", request.getServletPath())
                 || new AntPathMatcher().match("/swagger-ui.html", request.getServletPath())
                 || new AntPathMatcher().match("/v2/api-docs", request.getServletPath())
                 || new AntPathMatcher().match("/webjars/**", request.getServletPath())
-                || new AntPathMatcher().match( "/swagger-ui/**", request.getServletPath());
+                || new AntPathMatcher().match("/swagger-ui/**", request.getServletPath());
 
     }
 }
