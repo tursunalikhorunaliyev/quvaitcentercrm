@@ -7,6 +7,6 @@ public class MainPageController {
     @GetMapping("/netflex")
     public String home(){
         return "index";
-        //kkk
+        //kk
     }
 }
