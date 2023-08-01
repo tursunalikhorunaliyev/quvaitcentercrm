@@ -2,6 +2,7 @@ package com.itcentercrmquva.quvaitcentercrm.controller;
 
 import com.itcentercrmquva.quvaitcentercrm.dto.ResponseResult;
 import com.itcentercrmquva.quvaitcentercrm.entity.EducationLevel;
+import com.itcentercrmquva.quvaitcentercrm.projection.EducationLevelProjection;
 import com.itcentercrmquva.quvaitcentercrm.service.EducationLeverService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class EducationLevelController {
     private final EducationLeverService educationLeverService;
 
     @GetMapping("all")
-    public ResponseEntity<List<EducationLevel>> all() {
+    public ResponseEntity<List<EducationLevelProjection>> all() {
         return educationLeverService.getAllEducationLevels();
     }
 

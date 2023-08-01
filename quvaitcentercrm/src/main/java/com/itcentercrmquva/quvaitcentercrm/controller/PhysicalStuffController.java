@@ -31,6 +31,7 @@ public class PhysicalStuffController {
     @GetMapping("all")
     public ResponseEntity<List<PhysicalStuffProjection>> getAll(HttpServletRequest request){
         return physicalStuffService.getAllByOrg(request);
+
     }
 
     @GetMapping("by-category")

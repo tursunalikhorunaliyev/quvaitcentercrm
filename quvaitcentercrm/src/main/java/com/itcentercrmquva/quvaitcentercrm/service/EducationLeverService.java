@@ -5,6 +5,7 @@ import com.itcentercrmquva.quvaitcentercrm.entity.EducationLevel;
 import com.itcentercrmquva.quvaitcentercrm.entity.Roles;
 import com.itcentercrmquva.quvaitcentercrm.entity.StuffCategory;
 import com.itcentercrmquva.quvaitcentercrm.entity.Users;
+import com.itcentercrmquva.quvaitcentercrm.projection.EducationLevelProjection;
 import com.itcentercrmquva.quvaitcentercrm.repository.EducationLevelRepository;
 import com.itcentercrmquva.quvaitcentercrm.repository.RoleRepository;
 import com.itcentercrmquva.quvaitcentercrm.repository.UserRepository;
@@ -36,8 +37,8 @@ public class EducationLeverService {
     private  final RoleRepository roleRepository;
 
 
-    public ResponseEntity<List<EducationLevel>> getAllEducationLevels(){
-        return ResponseEntity.ok(educationLevelRepository.findAll());
+    public ResponseEntity<List<EducationLevelProjection>> getAllEducationLevels(){
+        return ResponseEntity.ok(educationLevelRepository.getAllLevels());
     }
 
     public ResponseEntity<ResponseResult> uploadAllEducationLevels(MultipartFile file, HttpServletRequest request){

@@ -13,5 +13,5 @@ import java.util.List;
 public interface EducationLevelRepository extends JpaRepository<EducationLevel, Long> {
     boolean existsByName(String name);
     @Query("SELECT e FROM EducationLevel e")
-    List<EducationLevelProjection> getAllSubjects();
+    List<EducationLevelProjection> getAllLevels();
 }
