@@ -4,6 +4,7 @@ import com.itcentercrmquva.quvaitcentercrm.dto.ResponseResult;
 import com.itcentercrmquva.quvaitcentercrm.entity.Roles;
 import com.itcentercrmquva.quvaitcentercrm.entity.StuffCategory;
 import com.itcentercrmquva.quvaitcentercrm.entity.Users;
+import com.itcentercrmquva.quvaitcentercrm.projection.StuffCategoryProjection;
 import com.itcentercrmquva.quvaitcentercrm.repository.RoleRepository;
 import com.itcentercrmquva.quvaitcentercrm.repository.StuffCategoryRepository;
 import com.itcentercrmquva.quvaitcentercrm.repository.UserRepository;
@@ -22,6 +23,7 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @AllArgsConstructor
@@ -34,8 +36,8 @@ public class StuffCategoryService {
 
     private final RoleRepository roleRepository;
 
-    public ResponseEntity<List<StuffCategory>> getAllStuff() {
-        return ResponseEntity.ok(stuffCategoryRepository.findAll());
+    public ResponseEntity<Set<StuffCategoryProjection>> getAllStuff() {
+        return ResponseEntity.ok(stuffCategoryRepository.findAllStuffCategoryByJPQL());
     }
 
     public ResponseEntity<ResponseResult> uploadAllStuffCategories(MultipartFile file, HttpServletRequest request) {

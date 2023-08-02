@@ -47,11 +47,11 @@ public class PhysicalStuffService {
             return new ResponseEntity<>(new ResponseResult(false, "Kategoriya topilmadi"), HttpStatus.BAD_REQUEST);
         }
         PhysicalStuff physicalStuff = new PhysicalStuff();
-        if(dateService.isDateAvailable(startDate.trim())){
+        if(!dateService.isDateAvailable(startDate.trim())){
             return new ResponseEntity<>(new ResponseResult(false, "Start date xato kiritildi"), HttpStatus.BAD_REQUEST);
         }
         if(endDate!=null){
-            if(dateService.isDateAvailable(endDate.trim())){
+            if(!dateService.isDateAvailable(endDate.trim())){
                 return new ResponseEntity<>(new ResponseResult(false, "End date xato kiritildi"), HttpStatus.BAD_REQUEST);
             }
             physicalStuff.setEndDate(dateService.generateLocalDate(endDate.trim()));

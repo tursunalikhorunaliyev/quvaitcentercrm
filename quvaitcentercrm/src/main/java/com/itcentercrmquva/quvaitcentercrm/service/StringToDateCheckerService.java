@@ -9,23 +9,23 @@ import java.time.LocalDate;
 public class StringToDateCheckerService {
     public boolean isDateAvailable(String date){
         String[] dateArray = date.split("-");
-        int day = Integer.parseInt(dateArray[0]);
+        int year = Integer.parseInt(dateArray[0]);
         int month = Integer.parseInt(dateArray[1]);
-        int year = Integer.parseInt(dateArray[2]);
+        int day = Integer.parseInt(dateArray[2]);
 
         try{
             LocalDate localDate = LocalDate.of(year, month, day);
-            return false;
+            return true;
         }
         catch (DateTimeException e){
-            return true;
+            return false;
         }
     }
     public LocalDate generateLocalDate(String date){
         String[] dateArray = date.split("-");
-        int day = Integer.parseInt(dateArray[0]);
+        int year = Integer.parseInt(dateArray[0]);
         int month = Integer.parseInt(dateArray[1]);
-        int year = Integer.parseInt(dateArray[2]);
+        int day = Integer.parseInt(dateArray[2]);
         return LocalDate.of(year, month, day);
     }
 }
