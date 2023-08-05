@@ -1,12 +1,10 @@
 package com.itcentercrmquva.quvaitcentercrm.service;
 
+import com.itcentercrmquva.quvaitcentercrm.dto.PhysicalFaceUpdateBodyDTO;
 import com.itcentercrmquva.quvaitcentercrm.dto.ResponseResult;
 import com.itcentercrmquva.quvaitcentercrm.entity.*;
 import com.itcentercrmquva.quvaitcentercrm.projection.PhysicalFaceProjection;
-import com.itcentercrmquva.quvaitcentercrm.repository.EducationLevelRepository;
-import com.itcentercrmquva.quvaitcentercrm.repository.InterestsRepository;
-import com.itcentercrmquva.quvaitcentercrm.repository.PhysicalFaceRepository;
-import com.itcentercrmquva.quvaitcentercrm.repository.UserRepository;
+import com.itcentercrmquva.quvaitcentercrm.repository.*;
 import com.itcentercrmquva.quvaitcentercrm.security.JWTGenerator;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,9 +14,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.*;
-import java.util.stream.Stream;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -30,6 +30,7 @@ public class PhysicalFaceService {
     private final PhysicalFaceRepository physicalFaceRepository;
     private final InterestsRepository interestsRepository;
     private final EducationLevelRepository educationLevelRepository;
+    private final ImageStoreRepository imageStoreRepository;
 
     public ResponseEntity<ResponseResult> create(String firstname, String lastname, String middleName, String birthday,
                                                  String identification, String address, String primaryPhone, String secondaryPhone,
@@ -42,7 +43,7 @@ public class PhysicalFaceService {
             return new ResponseEntity<>(new ResponseResult(false, "Foydalanuvchi o'chirib yuborilgan"), HttpStatus.BAD_REQUEST);
         }
 
-        if(physicalFaceRepository.existsByPersonalIdentification(identification.trim())){
+        if (physicalFaceRepository.existsByPersonalIdentification(identification.trim())) {
             return new ResponseEntity<>(new ResponseResult(false, "Ushbu ma'lumot serverda mavjud"), HttpStatus.BAD_REQUEST);
         }
 
@@ -62,7 +63,7 @@ public class PhysicalFaceService {
         try {
             imageStore.setContent(photo.getBytes());
         } catch (IOException e) {
-             return new ResponseEntity<>(new ResponseResult(false, "Rasm yuklashda muammo"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new ResponseResult(false, "Rasm yuklashda muammo"), HttpStatus.BAD_REQUEST);
         }
         if (firstname.isEmpty()) {
             return new ResponseEntity<>(new ResponseResult(false, "Ism bo'sh"), HttpStatus.BAD_REQUEST);
@@ -70,7 +71,7 @@ public class PhysicalFaceService {
         if (lastname.isEmpty()) {
             return new ResponseEntity<>(new ResponseResult(false, "Familiya bo'sh"), HttpStatus.BAD_REQUEST);
         }
-        if(birthday.isEmpty()){
+        if (birthday.isEmpty()) {
             return new ResponseEntity<>(new ResponseResult(false, "Tug'ilgan sana kirtilmadi"), HttpStatus.BAD_REQUEST);
         }
         if (identification.isEmpty()) {
@@ -88,7 +89,7 @@ public class PhysicalFaceService {
         }
         Optional<EducationLevel> educationLevel = educationLevelRepository.findById(eLevelId);
 
-        if(educationLevel.isEmpty()){
+        if (educationLevel.isEmpty()) {
             return new ResponseEntity<>(new ResponseResult(false, "Educational level topilmadi"), HttpStatus.BAD_REQUEST);
         }
 
@@ -102,7 +103,6 @@ public class PhysicalFaceService {
         physicalFace.setEducationLevel(educationLevel.get());
         physicalFace.setPhoto(imageStore);
         physicalFace.setUser(user.get());
-
 
 
         if (middleName != null) {
@@ -120,12 +120,12 @@ public class PhysicalFaceService {
         if (interests != null) {
             String[] interestIds = interests.split(",");
 
-          List<Long> ids =  Arrays.stream(interestIds).map(Long::valueOf).toList();
+            List<Long> ids = Arrays.stream(interestIds).map(Long::valueOf).toList();
 
 
             Set<Interests> allInterests = interestsRepository.findInterestssByIds(ids);
-            for(Interests a: allInterests){
-                System.out.println("----------------------------------------------"+a.getName());
+            for (Interests a : allInterests) {
+                System.out.println("----------------------------------------------" + a.getName());
             }
             physicalFace.setInterests(allInterests);
             System.out.println("set bo'ldiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
@@ -137,14 +137,60 @@ public class PhysicalFaceService {
 
     }
 
-    public ResponseEntity<List<PhysicalFaceProjection>> getAll(HttpServletRequest request){
+    public ResponseEntity<List<PhysicalFaceProjection>> getAll(HttpServletRequest request) {
         Optional<Users> user = userRepository.findByUsername(jwtGenerator.getUsernameFromToken(request.getHeader("Authorization").substring(7)));
         return ResponseEntity.ok(physicalFaceRepository.findAllFaces());
 
     }
 
-    public ResponseEntity<Object> getById(Long id){
-      Optional<PhysicalFaceProjection> physicalFaceProjection = physicalFaceRepository.findByIdByQuery(id);
+    public ResponseEntity<Object> getById(Long id) {
+        Optional<PhysicalFaceProjection> physicalFaceProjection = physicalFaceRepository.findByIdByQuery(id);
         return physicalFaceProjection.<ResponseEntity<Object>>map(ResponseEntity::ok).orElseGet(() -> new ResponseEntity<>(new ResponseResult(false, "Ma'lumot topilmadi"), HttpStatus.BAD_REQUEST));
+    }
+
+    public ResponseEntity<Object> updatePhysicalFace(Long id, String firstname, String lastname, String middleName, String birthday,
+                                                     String identification, String address, String primaryPhone, String secondaryPhone,
+                                                     String telegram, String instagram, Long eLevelId, String interests, MultipartFile multipartFile) {
+        Optional<PhysicalFace> pf = physicalFaceRepository.findById((long) id);
+        if (pf.isPresent()) {
+            PhysicalFace face = pf.get();
+            if (multipartFile != null) {
+                try {
+                    ImageStore image = new ImageStore();
+                    image.setFilename(multipartFile.getOriginalFilename());
+                    image.setContent(multipartFile.getBytes());
+                    image.setUsers(face.getUser());
+                    image.setTimestamp(Timestamp.from(Instant.now()));
+                    ImageStore newImage = imageStoreRepository.save(image);
+                    face.setPhoto(newImage);
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+            if (address != null) face.setAddress((address));
+            if (birthday != null) face.setBirthday(LocalDate.parse(birthday));
+            if (eLevelId != null) {
+                Optional<EducationLevel> educationLevel = educationLevelRepository.findById(eLevelId);
+                educationLevel.ifPresent(face::setEducationLevel);
+            }
+            if (firstname != null) face.setFirstName(firstname);
+            if (identification != null) face.setPersonalIdentification(identification);
+            if (instagram != null) face.setInstagramUsername(instagram);
+            if (interests != null) {
+                String[] ids = ((interests).trim()).split(",");
+                List<Long> longIds = Arrays.stream(ids).map(Long::parseLong).collect(Collectors.toList());
+                Set<Interests> interest = interestsRepository.findInterestssByIds(longIds);
+                face.setInterests(interest);
+            }
+            if (lastname != null) face.setLastName(lastname);
+            if (middleName != null) face.setMiddleName(middleName);
+            if (primaryPhone != null) face.setPrimaryPhone(primaryPhone);
+            if (secondaryPhone != null) face.setSecondaryPhone(secondaryPhone);
+            if (telegram != null) face.setTelegramUsername(telegram);
+            physicalFaceRepository.save(face);
+            return ResponseEntity.ok(true);
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
     }
 }
