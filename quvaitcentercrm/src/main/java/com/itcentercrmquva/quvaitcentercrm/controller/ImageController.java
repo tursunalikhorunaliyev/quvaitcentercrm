@@ -17,7 +17,7 @@ public class ImageController {
 
     private final ImageStoreService imageStoreService;
     @GetMapping("get")
-    public ResponseEntity<byte[]> getImage(@RequestParam Long id){
+    public ResponseEntity<byte[]> getxImage(@RequestParam Long id){
         return imageStoreService.getImage(id);
     }
 }

@@ -30,7 +30,7 @@ public interface PhysicalFaceProjection {
     @Value("#{target.instagramUsername==null?'': {target.instagramUsername}}")
     String getInstagramUsername();
 
-    @Value("http://192.168.1.3:8080/api/image/get?id=#{target.photo.id}")
+    @Value("https://1eb2-213-230-78-214.ngrok-free.app/api/image/get?id=#{target.photo.id}")
     String getPhoto();
 
     EducationLevelProjection getEducationLevel();

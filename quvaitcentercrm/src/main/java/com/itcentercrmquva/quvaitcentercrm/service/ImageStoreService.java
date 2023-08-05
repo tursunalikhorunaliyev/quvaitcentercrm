@@ -21,7 +21,7 @@ public class ImageStoreService {
             final HttpHeaders headers = new HttpHeaders();
             final String filename = image.getFilename();
             String ext = filename.substring(filename.lastIndexOf("."));
-            headers.add("Content-Disposition", "inline;filename=" + filename);
+            //headers.add("Content-Disposition", "inline;filename=" + filename);
             headers.setContentType((ext.contains("png")) ? MediaType.IMAGE_PNG : MediaType.IMAGE_JPEG);
             return ResponseEntity.ok().headers(headers).body(image.getContent());
         } else {
