@@ -148,7 +148,7 @@ public class PhysicalFaceService {
         return physicalFaceProjection.<ResponseEntity<Object>>map(ResponseEntity::ok).orElseGet(() -> new ResponseEntity<>(new ResponseResult(false, "Ma'lumot topilmadi"), HttpStatus.BAD_REQUEST));
     }
 
-    public ResponseEntity<Object> updatePhysicalFace(Long id, String firstname, String lastname, String middleName, String birthday,
+    public ResponseEntity<Boolean> updatePhysicalFace(Long id, String firstname, String lastname, String middleName, String birthday,
                                                      String identification, String address, String primaryPhone, String secondaryPhone,
                                                      String telegram, String instagram, Long eLevelId, String interests, MultipartFile multipartFile) {
         Optional<PhysicalFace> pf = physicalFaceRepository.findById((long) id);
