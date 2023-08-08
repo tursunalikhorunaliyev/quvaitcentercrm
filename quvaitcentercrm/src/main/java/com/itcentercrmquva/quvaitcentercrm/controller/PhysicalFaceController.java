@@ -38,8 +38,8 @@ public class PhysicalFaceController {
         return physicalFaceService.create(firstname, lastname, middleName, birthday, identification, address, primaryPhone, secondaryPhone, telegram, instagram, eLevelId, interests, photo, request);
     }
 
-    @PutMapping("")
-    public ResponseEntity<Object> create(@RequestParam(value = "id", required = false) Long id,
+    @PutMapping("update")
+    public ResponseEntity<Boolean> create(@RequestParam("id") Long id,
                                                  @RequestParam(value = "firstname", required = false) String firstname,
                                                  @RequestParam(value = "lastname", required = false) String lastname,
                                                  @RequestParam(value = "middleName", required = false) String middleName,

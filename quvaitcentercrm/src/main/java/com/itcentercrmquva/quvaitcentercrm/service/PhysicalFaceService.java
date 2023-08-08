@@ -46,17 +46,6 @@ public class PhysicalFaceService {
         if (physicalFaceRepository.existsByPersonalIdentification(identification.trim())) {
             return new ResponseEntity<>(new ResponseResult(false, "Ushbu ma'lumot serverda mavjud"), HttpStatus.BAD_REQUEST);
         }
-
-        firstname = firstname.trim();
-        lastname = lastname.trim();
-        identification = identification.trim();
-        address = address.trim();
-        primaryPhone = primaryPhone.trim();
-        birthday = birthday.trim();
-        String[] birthDayString = birthday.split("-");
-        int[] birthdayInt = Arrays.stream(birthDayString)
-                .mapToInt(Integer::parseInt)
-                .toArray();
         ImageStore imageStore = new ImageStore();
         imageStore.setUsers(user.get());
         imageStore.setFilename(photo.getOriginalFilename());
@@ -64,28 +53,6 @@ public class PhysicalFaceService {
             imageStore.setContent(photo.getBytes());
         } catch (IOException e) {
             return new ResponseEntity<>(new ResponseResult(false, "Rasm yuklashda muammo"), HttpStatus.BAD_REQUEST);
-        }
-        if (firstname.isEmpty()) {
-            return new ResponseEntity<>(new ResponseResult(false, "Ism bo'sh"), HttpStatus.BAD_REQUEST);
-        }
-        if (lastname.isEmpty()) {
-            return new ResponseEntity<>(new ResponseResult(false, "Familiya bo'sh"), HttpStatus.BAD_REQUEST);
-        }
-        if (birthday.isEmpty()) {
-            return new ResponseEntity<>(new ResponseResult(false, "Tug'ilgan sana kirtilmadi"), HttpStatus.BAD_REQUEST);
-        }
-        if (identification.isEmpty()) {
-            return new ResponseEntity<>(new ResponseResult(false, "Passport seriyasi bo'sh"), HttpStatus.BAD_REQUEST);
-        } else if (identification.length() != 9) {
-            return new ResponseEntity<>(new ResponseResult(false, "Passport seriyasi to'g'ri kiritilmadi"), HttpStatus.BAD_REQUEST);
-        }
-        if (address.isEmpty()) {
-            return new ResponseEntity<>(new ResponseResult(false, "Address bo'sh"), HttpStatus.BAD_REQUEST);
-        }
-        if (primaryPhone.isEmpty()) {
-            return new ResponseEntity<>(new ResponseResult(false, "Telefon raqam kiritilmagan"), HttpStatus.BAD_REQUEST);
-        } else if (primaryPhone.length() != 12) {
-            return new ResponseEntity<>(new ResponseResult(false, "Asosiy telefon raqam xato kiritilgan"), HttpStatus.BAD_REQUEST);
         }
         Optional<EducationLevel> educationLevel = educationLevelRepository.findById(eLevelId);
 
@@ -97,7 +64,7 @@ public class PhysicalFaceService {
         physicalFace.setFirstName(firstname);
         physicalFace.setLastName(lastname);
         physicalFace.setAddress(address);
-        physicalFace.setBirthday(LocalDate.of(birthdayInt[0], birthdayInt[1], birthdayInt[2]));
+        physicalFace.setBirthday(generateDate(birthday));
         physicalFace.setPersonalIdentification(identification);
         physicalFace.setPrimaryPhone(primaryPhone);
         physicalFace.setEducationLevel(educationLevel.get());
@@ -119,16 +86,9 @@ public class PhysicalFaceService {
         }
         if (interests != null) {
             String[] interestIds = interests.split(",");
-
             List<Long> ids = Arrays.stream(interestIds).map(Long::valueOf).toList();
-
-
             Set<Interests> allInterests = interestsRepository.findInterestssByIds(ids);
-            for (Interests a : allInterests) {
-                System.out.println("----------------------------------------------" + a.getName());
-            }
             physicalFace.setInterests(allInterests);
-            System.out.println("set bo'ldiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
         }
 
         physicalFaceRepository.save(physicalFace);
@@ -151,7 +111,7 @@ public class PhysicalFaceService {
     public ResponseEntity<Boolean> updatePhysicalFace(Long id, String firstname, String lastname, String middleName, String birthday,
                                                      String identification, String address, String primaryPhone, String secondaryPhone,
                                                      String telegram, String instagram, Long eLevelId, String interests, MultipartFile multipartFile) {
-        Optional<PhysicalFace> pf = physicalFaceRepository.findById((long) id);
+        Optional<PhysicalFace> pf = physicalFaceRepository.findById(id);
         if (pf.isPresent()) {
             PhysicalFace face = pf.get();
             if (multipartFile != null) {
@@ -168,14 +128,13 @@ public class PhysicalFaceService {
                 }
             }
             if (address != null) face.setAddress((address));
-            if (birthday != null) face.setBirthday(LocalDate.parse(birthday));
+            if (birthday != null) face.setBirthday(generateDate(birthday));
             if (eLevelId != null) {
                 Optional<EducationLevel> educationLevel = educationLevelRepository.findById(eLevelId);
                 educationLevel.ifPresent(face::setEducationLevel);
             }
             if (firstname != null) face.setFirstName(firstname);
             if (identification != null) face.setPersonalIdentification(identification);
-            if (instagram != null) face.setInstagramUsername(instagram);
             if (interests != null) {
                 String[] ids = ((interests).trim()).split(",");
                 List<Long> longIds = Arrays.stream(ids).map(Long::parseLong).collect(Collectors.toList());
@@ -187,10 +146,19 @@ public class PhysicalFaceService {
             if (primaryPhone != null) face.setPrimaryPhone(primaryPhone);
             if (secondaryPhone != null) face.setSecondaryPhone(secondaryPhone);
             if (telegram != null) face.setTelegramUsername(telegram);
+            if (instagram != null) face.setInstagramUsername(instagram);
             physicalFaceRepository.save(face);
             return ResponseEntity.ok(true);
         } else {
             return ResponseEntity.badRequest().build();
         }
+    }
+
+    private LocalDate generateDate(String date){
+        String[] birthDayString = date.split("-");
+        int[] birthdayInt = Arrays.stream(birthDayString)
+                .mapToInt(Integer::parseInt)
+                .toArray();
+       return LocalDate.of(birthdayInt[0],birthdayInt[1], birthdayInt[2]);
     }
 }
