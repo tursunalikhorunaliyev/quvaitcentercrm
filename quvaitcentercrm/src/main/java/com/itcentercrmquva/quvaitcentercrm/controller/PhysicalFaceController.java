@@ -52,8 +52,10 @@ public class PhysicalFaceController {
                                                  @RequestParam(value = "instagram", required = false) String instagram,
                                                  @RequestParam(value = "e_level", required = false) Long eLevelId,
                                                  @RequestParam(value = "interests", required = false) String interests,
-                                                 @RequestParam(value = "photo", required = false) MultipartFile photo) {
-        return physicalFaceService.updatePhysicalFace(id, firstname, lastname, middleName, birthday, identification, address, primaryPhone, secondaryPhone, telegram, instagram, eLevelId, interests, photo);
+                                                 @RequestParam(value = "photo", required = false) MultipartFile photo,
+                                          HttpServletRequest httpServletRequest
+                                          ) {
+        return physicalFaceService.updatePhysicalFace(id, firstname, lastname, middleName, birthday, identification, address, primaryPhone, secondaryPhone, telegram, instagram, eLevelId, interests, photo, httpServletRequest);
     }
 
     @GetMapping("all")
