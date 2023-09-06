@@ -5,7 +5,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.Set;
 import java.sql.Timestamp;
 
 @Getter
@@ -49,24 +48,20 @@ public class PhysicalFaceHistory {
     @Column
     private String instagramUsername;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "photo", referencedColumnName = "id", nullable = false, unique = true)
-    private ImageStore photo;
+    @Column(name = "photo", nullable = false, unique = true)
+    private Long photo;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "e_level", referencedColumnName = "id", nullable = false)
-    private EducationLevel educationLevel;
+    @Column(name = "e_level", nullable = false)
+    private Long educationLevel;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "pyface_interests", joinColumns = @JoinColumn(name = "pyface_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "interest_id", referencedColumnName = "id"))
-    private Set<Interests> interests;
+    @Column(name = "pyface_interests")
+    private String interests;
 
     @Column(name = "timestamp", nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     public Timestamp timestamp;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
-    private Users user;
+    @Column(name = "user_id", nullable = false)
+    private Long user;
 
     // Additional
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
