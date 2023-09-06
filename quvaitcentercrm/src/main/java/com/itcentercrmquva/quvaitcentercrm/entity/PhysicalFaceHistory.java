@@ -64,13 +64,11 @@ public class PhysicalFaceHistory {
     private Long user;
 
     // Additional
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "physical_face_id", referencedColumnName = "id", nullable = false)
-    private PhysicalFace physicalFace;
+    @Column(name = "physical_face_id", nullable = false)
+    private Long physicalFace;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "updater_user_id", referencedColumnName = "id", nullable = false)
-    private Users updaterUser;
+    @JoinColumn(name = "updater_user_id", nullable = false)
+    private Long updaterUser;
 
     @Column(name = "updated_time", nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     public Timestamp updatedTime;

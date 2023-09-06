@@ -19,8 +19,8 @@ public class PhysicalFaceHistoryService {
 
     public PhysicalFaceHistory writeHistory(PhysicalFace face, Users updater) {
         final PhysicalFaceHistory history = new PhysicalFaceHistory();
-        history.setPhysicalFace(face);
-        history.setUpdaterUser(updater);
+        history.setPhysicalFace(face.getId());
+        history.setUpdaterUser(updater.getId());
         history.setFirstName(face.getFirstName());
         history.setLastName(face.getLastName());
         history.setMiddleName(face.getMiddleName());
