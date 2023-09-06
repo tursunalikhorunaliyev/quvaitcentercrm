@@ -1,6 +1,5 @@
 package com.itcentercrmquva.quvaitcentercrm.service;
 
-import com.itcentercrmquva.quvaitcentercrm.dto.PhysicalFaceUpdateBodyDTO;
 import com.itcentercrmquva.quvaitcentercrm.dto.ResponseResult;
 import com.itcentercrmquva.quvaitcentercrm.entity.*;
 import com.itcentercrmquva.quvaitcentercrm.projection.PhysicalFaceProjection;
@@ -26,7 +25,7 @@ public class PhysicalFaceService {
 
     private final UserRepository userRepository;
     private final JWTGenerator jwtGenerator;
-
+    private final PhysicalFaceHistoryRepository physicalFaceHistoryRepository;
     private final PhysicalFaceRepository physicalFaceRepository;
     private final InterestsRepository interestsRepository;
     private final EducationLevelRepository educationLevelRepository;
@@ -90,7 +89,6 @@ public class PhysicalFaceService {
             Set<Interests> allInterests = interestsRepository.findInterestssByIds(ids);
             physicalFace.setInterests(allInterests);
         }
-
         physicalFaceRepository.save(physicalFace);
 
         return ResponseEntity.ok(new ResponseResult(true, "Barcha ma'lumotlar saqlandi"));
@@ -109,8 +107,13 @@ public class PhysicalFaceService {
     }
 
     public ResponseEntity<Boolean> updatePhysicalFace(Long id, String firstname, String lastname, String middleName, String birthday,
-                                                     String identification, String address, String primaryPhone, String secondaryPhone,
-                                                     String telegram, String instagram, Long eLevelId, String interests, MultipartFile multipartFile) {
+                                                      String identification, String address, String primaryPhone, String secondaryPhone,
+                                                      String telegram, String instagram, Long eLevelId, String interests, MultipartFile multipartFile,
+                                                      HttpServletRequest request) {
+        Optional<Users> user = userRepository.findByUsername(jwtGenerator.getUsernameFromToken(request.getHeader("Authorization").substring(7)));
+        if (user.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
         Optional<PhysicalFace> pf = physicalFaceRepository.findById(id);
         if (pf.isPresent()) {
             PhysicalFace face = pf.get();
@@ -147,18 +150,24 @@ public class PhysicalFaceService {
             if (secondaryPhone != null) face.setSecondaryPhone(secondaryPhone);
             if (telegram != null) face.setTelegramUsername(telegram);
             if (instagram != null) face.setInstagramUsername(instagram);
-            physicalFaceRepository.save(face);
+            final PhysicalFaceHistoryService physicalFaceHistoryService = new PhysicalFaceHistoryService(physicalFaceHistoryRepository);
+            final PhysicalFaceHistory physicalFaceHistory = physicalFaceHistoryService.writeHistory(face, user.get());
+            if (physicalFaceHistory != null) {
+                physicalFaceRepository.save(face);
+            } else {
+                return ResponseEntity.badRequest().build();
+            }
             return ResponseEntity.ok(true);
         } else {
             return ResponseEntity.badRequest().build();
         }
     }
 
-    private LocalDate generateDate(String date){
+    private LocalDate generateDate(String date) {
         String[] birthDayString = date.split("-");
         int[] birthdayInt = Arrays.stream(birthDayString)
                 .mapToInt(Integer::parseInt)
                 .toArray();
-       return LocalDate.of(birthdayInt[0],birthdayInt[1], birthdayInt[2]);
+        return LocalDate.of(birthdayInt[0], birthdayInt[1], birthdayInt[2]);
     }
 }
