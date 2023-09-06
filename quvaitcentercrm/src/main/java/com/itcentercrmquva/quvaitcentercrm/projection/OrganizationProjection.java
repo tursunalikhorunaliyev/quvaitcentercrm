@@ -13,7 +13,7 @@ public interface OrganizationProjection {
     String getEmail();
     String getINN();
     String getGNumber();
-    @Value("https://b7ec-213-230-78-235.ngrok-free.app/api/image/get?id=#{target.gPhoto.id}")
+    @Value("{target.gPhoto.id}")
     String getImage();
 
 }

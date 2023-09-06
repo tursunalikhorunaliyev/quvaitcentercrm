@@ -5,8 +5,8 @@ import org.springframework.beans.factory.annotation.Value;
 
 public interface OrganizationsSSProjection {
     Long getId();
-    @Value("https://b7ec-213-230-78-235.ngrok-free.app/api/image/get?id=#{target.imageStore.id}")
-    String getImageStore();
+    @Value("#{target.imageStore.id}")
+    Long getImageStore();
     SubjectsProjection getSubject();
     SubSubjectProjection getSubSubject();
     OrganizationProjection getOrganization();

@@ -20,12 +20,12 @@ public class PhysicalStuffController {
 
     @PostMapping("create")
     public ResponseEntity<ResponseResult> create(
-            @RequestParam("fid") Long fid,
-            @RequestParam("cid") Long cid,
+            @RequestParam("fid") String fid,
+            @RequestParam("cid") String cid,
             @RequestParam("start_date") String startDate,
             @RequestParam(value = "end_date", required = false) String endDate,
             HttpServletRequest request){
-        return physicalStuffService.create(fid, cid, startDate, endDate, request);
+        return physicalStuffService.create(Long.parseLong(fid), Long.parseLong(cid), startDate, endDate, request);
     }
 
     @GetMapping("all")
