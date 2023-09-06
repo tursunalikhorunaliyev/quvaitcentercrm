@@ -30,7 +30,7 @@ public class PhysicalFaceHistory {
     @Column(nullable = false)
     private LocalDate birthday;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String personalIdentification;
 
     @Column(nullable = false)
@@ -48,7 +48,7 @@ public class PhysicalFaceHistory {
     @Column
     private String instagramUsername;
 
-    @Column(name = "photo", nullable = false, unique = true)
+    @Column(name = "photo", nullable = false)
     private Long photo;
 
     @Column(name = "e_level", nullable = false)
@@ -57,7 +57,7 @@ public class PhysicalFaceHistory {
     @Column(name = "pyface_interests")
     private String interests;
 
-    @Column(name = "timestamp", nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "timestamp", nullable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     public Timestamp timestamp;
 
     @Column(name = "user_id", nullable = false)
@@ -67,10 +67,10 @@ public class PhysicalFaceHistory {
     @Column(name = "physical_face_id", nullable = false)
     private Long physicalFace;
 
-    @JoinColumn(name = "updater_user_id", nullable = false)
+    @Column(name = "updater_user_id", nullable = false)
     private Long updaterUser;
 
-    @Column(name = "updated_time", nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "updated_time", nullable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     public Timestamp updatedTime;
 
 }

@@ -117,6 +117,9 @@ public class PhysicalFaceService {
         Optional<PhysicalFace> pf = physicalFaceRepository.findById(id);
         if (pf.isPresent()) {
             PhysicalFace face = pf.get();
+            // write to history
+            final PhysicalFaceHistoryService physicalFaceHistoryService = new PhysicalFaceHistoryService(physicalFaceHistoryRepository);
+            final PhysicalFaceHistory physicalFaceHistory = physicalFaceHistoryService.writeHistory(face, user.get());
             if (multipartFile != null) {
                 try {
                     ImageStore image = new ImageStore();
@@ -150,8 +153,6 @@ public class PhysicalFaceService {
             if (secondaryPhone != null) face.setSecondaryPhone(secondaryPhone);
             if (telegram != null) face.setTelegramUsername(telegram);
             if (instagram != null) face.setInstagramUsername(instagram);
-            final PhysicalFaceHistoryService physicalFaceHistoryService = new PhysicalFaceHistoryService(physicalFaceHistoryRepository);
-            final PhysicalFaceHistory physicalFaceHistory = physicalFaceHistoryService.writeHistory(face, user.get());
             if (physicalFaceHistory != null) {
                 physicalFaceRepository.save(face);
             } else {
