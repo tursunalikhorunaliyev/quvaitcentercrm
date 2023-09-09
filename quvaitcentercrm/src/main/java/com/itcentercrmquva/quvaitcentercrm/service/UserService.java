@@ -18,7 +18,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -75,6 +77,13 @@ public class UserService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = jwtGenerator.generateToken(authentication);
         return new ResponseEntity<>(new LoginDTO("User successfuly logged in",token), HttpStatus.OK);
+    }
+
+    public ResponseEntity<List<Long>> getUserIDs(Long orgId) {
+        final List<Users> users = userRepository.findByRoles_NameAndOrganization_Id("USER", orgId);
+        final List<Long> ids = new ArrayList<>();
+        users.stream().map(users1 -> ids.add(users1.getId()));
+        return new ResponseEntity<>(ids, HttpStatus.OK);
     }
 
 }

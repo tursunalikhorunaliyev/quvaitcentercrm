@@ -11,5 +11,4 @@ public interface PhysicalStuffProjection {
     PhysicalFaceProjection getPhysicalFace();
     StuffCategoryProjection getStuffCategory();
     LocalDate getStartDate();
-    OrganizationProjection getOrganizations();
 }
