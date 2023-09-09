@@ -28,8 +28,8 @@ public class OrganizationsController {
     }
 
     @GetMapping("org-users")
-    public ResponseEntity<List<Long>> getUserIds(@RequestParam("org_id") Long id) {
-        return userService.getUserIDs(id);
+    public ResponseEntity<List<Long>> getUserIds(HttpServletRequest request) {
+        return userService.getUserIDs(request);
     }
 
 

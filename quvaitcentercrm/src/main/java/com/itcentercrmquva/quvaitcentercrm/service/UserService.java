@@ -7,6 +7,7 @@ import com.itcentercrmquva.quvaitcentercrm.entity.Users;
 import com.itcentercrmquva.quvaitcentercrm.repository.OrganizationsRepository;
 import com.itcentercrmquva.quvaitcentercrm.repository.RoleRepository;
 import com.itcentercrmquva.quvaitcentercrm.repository.UserRepository;
+import com.itcentercrmquva.quvaitcentercrm.security.JWTAuthenticationFilter;
 import com.itcentercrmquva.quvaitcentercrm.security.JWTGenerator;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -32,6 +34,7 @@ public class UserService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final JWTGenerator jwtGenerator;
+
 
     private OrganizationsRepository organizationsRepository;
 
@@ -79,11 +82,18 @@ public class UserService {
         return new ResponseEntity<>(new LoginDTO("User successfuly logged in",token), HttpStatus.OK);
     }
 
-    public ResponseEntity<List<Long>> getUserIDs(Long orgId) {
-        final List<Users> users = userRepository.findByRoles_NameAndOrganization_Id("USER", orgId);
-        final List<Long> ids = new ArrayList<>();
-        users.stream().map(users1 -> ids.add(users1.getId()));
-        return new ResponseEntity<>(ids, HttpStatus.OK);
+    public ResponseEntity<List<Long>> getUserIDs(HttpServletRequest request) {
+        Optional<Users> user = userRepository.findByUsername(jwtGenerator.getUsernameFromToken(request.getHeader("Authorization").substring(7)));
+        if(user.isPresent()){
+            final List<Users> users = userRepository.findAllByRoles_NameAndOrganization_Id("USER", user.get().getOrganization().getId());
+            List<Long> ids = users.stream().map(Users::getId).toList();
+
+            return new ResponseEntity<>(ids, HttpStatus.OK);
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+
     }
 
 }
+
