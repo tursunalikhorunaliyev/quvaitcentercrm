@@ -5,6 +5,7 @@ import com.itcentercrmquva.quvaitcentercrm.entity.OrganizationsSubjectsWithSubSu
 import com.itcentercrmquva.quvaitcentercrm.entity.PhysicalStuff;
 import com.itcentercrmquva.quvaitcentercrm.entity.TeachersSubSubjects;
 import com.itcentercrmquva.quvaitcentercrm.entity.Users;
+import com.itcentercrmquva.quvaitcentercrm.projection.TeacherSubSubjectProjection;
 import com.itcentercrmquva.quvaitcentercrm.projection.TeachersSubSubjectsProjection;
 import com.itcentercrmquva.quvaitcentercrm.repository.OrganizationsSubjectsWithSubSubjectsRepository;
 import com.itcentercrmquva.quvaitcentercrm.repository.PhysicalStuffRepository;
@@ -57,10 +58,15 @@ public class TeachersSubSubjectsService {
 
     }
 
-    public ResponseEntity<List<TeachersSubSubjectsProjection>> getTeacherSubSubject(HttpServletRequest request) {
+    public ResponseEntity<List<TeachersSubSubjectsProjection>> getList(HttpServletRequest request) {
         Users users = jwtGenerator.getUserFromRequest(request);
         List<TeachersSubSubjectsProjection> list = teachersSubSubjectsRepository.findByOrganizations_Id(users.getOrganization().getId());
         return ResponseEntity.ok(list);
+    }
+
+    public ResponseEntity<TeacherSubSubjectProjection> get(Long id) {
+        TeacherSubSubjectProjection tssp = teachersSubSubjectsRepository.findPById(id).orElse(null);
+        return ResponseEntity.ok(tssp);
     }
 
 }

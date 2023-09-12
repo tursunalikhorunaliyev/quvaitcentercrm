@@ -1,6 +1,7 @@
 package com.itcentercrmquva.quvaitcentercrm.controller;
 
 import com.itcentercrmquva.quvaitcentercrm.dto.ResponseResult;
+import com.itcentercrmquva.quvaitcentercrm.projection.TeacherSubSubjectProjection;
 import com.itcentercrmquva.quvaitcentercrm.projection.TeachersSubSubjectsProjection;
 import com.itcentercrmquva.quvaitcentercrm.service.TeachersSubSubjectsService;
 import lombok.AllArgsConstructor;
@@ -22,8 +23,13 @@ public class TeachersSubSubjectsController {
         return teachersSubSubjectsService.create(physicalStuffId, ids, request);
     }
 
+    @GetMapping("list")
+    public ResponseEntity<List<TeachersSubSubjectsProjection>> list(HttpServletRequest request) {
+        return teachersSubSubjectsService.getList(request);
+    }
+
     @GetMapping("get")
-    public ResponseEntity<List<TeachersSubSubjectsProjection>> create(HttpServletRequest request) {
-        return teachersSubSubjectsService.getTeacherSubSubject(request);
+    public ResponseEntity<TeacherSubSubjectProjection> get(@RequestParam("id") Long id) {
+        return teachersSubSubjectsService.get(id);
     }
 }
