@@ -21,8 +21,8 @@ public class TeachersSubSubjects {
     @JoinColumn(name = "physical_stuff_id", referencedColumnName = "id", nullable = false)
     private PhysicalStuff physicalStuff;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "physical_face_ss", joinColumns = @JoinColumn(name = "physical_face_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "sub_subject_id", referencedColumnName = "id"))
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinTable(name = "physical_stuff_ss", joinColumns = @JoinColumn(name = "physical_face_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "sub_subject_id", referencedColumnName = "id"))
     private Set<OrganizationsSubjectsWithSubSubjects> orgSubSubjects;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
