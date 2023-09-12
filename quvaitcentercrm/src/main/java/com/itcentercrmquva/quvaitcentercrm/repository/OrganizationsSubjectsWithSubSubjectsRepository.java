@@ -8,6 +8,7 @@ import com.itcentercrmquva.quvaitcentercrm.projection.OrganizationsSSProjection;
 import com.itcentercrmquva.quvaitcentercrm.projection.SubjectsProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -30,6 +31,9 @@ public interface OrganizationsSubjectsWithSubSubjectsRepository extends JpaRepos
             select o.subject from OrganizationsSubjectsWithSubSubjects o
             where o.organization = ?1 group by o.subject""")
     List<Subjects> getOrgSubjects(Organizations organizations);
+
+    @Query("SELECT o FROM OrganizationsSubjectsWithSubSubjects o WHERE o.id IN (:ids)")
+    Set<OrganizationsSubjectsWithSubSubjects> getByInIds(@Param("ids") List<Long> ids);
 
 
 

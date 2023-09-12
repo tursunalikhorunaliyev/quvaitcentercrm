@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -20,9 +21,9 @@ public class TeachersSubSubjects {
     @JoinColumn(name = "physical_stuff_id", referencedColumnName = "id", nullable = false)
     private PhysicalStuff physicalStuff;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "sub_subject_id", referencedColumnName = "id", nullable = false)
-    private OrganizationsSubjectsWithSubSubjects orgSubSubject;
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "physical_face_ss", joinColumns = @JoinColumn(name = "physical_face_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "sub_subject_id", referencedColumnName = "id"))
+    private Set<OrganizationsSubjectsWithSubSubjects> orgSubSubjects;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "org_id", referencedColumnName = "id", nullable = false)

@@ -8,5 +8,6 @@ public interface OrganizationsSSProjection {
     @Value("#{target.imageStore.id}")
     Long getImageStore();
     SubSubjectProjection getSubSubject();
+    SubjectsProjection getSubject();
     String getDescription();
 }
