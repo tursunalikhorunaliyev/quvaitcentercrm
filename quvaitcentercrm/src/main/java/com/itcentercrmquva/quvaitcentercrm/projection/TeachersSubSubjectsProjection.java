@@ -1,10 +1,8 @@
 package com.itcentercrmquva.quvaitcentercrm.projection;
 
-import com.itcentercrmquva.quvaitcentercrm.entity.OrganizationsSubjectsWithSubSubjects;
-
 import java.util.Set;
 
-public interface TeachersSubSubjectProjection {
+public interface TeachersSubSubjectsProjection {
     Long getId();
     PhysicalStuffProjection getPhysicalStuff();
 

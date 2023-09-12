@@ -1,13 +1,14 @@
 package com.itcentercrmquva.quvaitcentercrm.controller;
 
 import com.itcentercrmquva.quvaitcentercrm.dto.ResponseResult;
-import com.itcentercrmquva.quvaitcentercrm.projection.TeachersSubSubjectProjection;
+import com.itcentercrmquva.quvaitcentercrm.projection.TeachersSubSubjectsProjection;
 import com.itcentercrmquva.quvaitcentercrm.service.TeachersSubSubjectsService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @RestController
 @RequestMapping("api/teachers-ss/")
@@ -22,7 +23,7 @@ public class TeachersSubSubjectsController {
     }
 
     @GetMapping("get")
-    public ResponseEntity<TeachersSubSubjectProjection> create(@RequestParam("id") Long id) {
-        return teachersSubSubjectsService.getTeacherSubSubject(id);
+    public ResponseEntity<List<TeachersSubSubjectsProjection>> create(HttpServletRequest request) {
+        return teachersSubSubjectsService.getTeacherSubSubject(request);
     }
 }
