@@ -4,5 +4,5 @@ import java.util.Set;
 
 public interface TeachersSubSubjectsProjection {
     Long getId();
-    Set<OrganizationsSSProjection> getOrgSubSubjects();
+    PhysicalStuffProjection getPhysicalStuff();
 }
