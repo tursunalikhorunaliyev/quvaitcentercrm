@@ -95,5 +95,16 @@ public class UserService {
 
     }
 
+    public ResponseEntity<Long> getUserID(HttpServletRequest request) {
+        Optional<Users> user = userRepository.findByUsername(jwtGenerator.getUsernameFromToken(request.getHeader("Authorization").substring(7)));
+        if(user.isPresent()){
+            final Optional<Users> users = userRepository.findByRoles_NameAndOrganization_Id("USER", user.get().getOrganization().getId());
+            return new ResponseEntity<Long>(users.get().getId(), HttpStatus.OK);
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+
+    }
+
 }
 
