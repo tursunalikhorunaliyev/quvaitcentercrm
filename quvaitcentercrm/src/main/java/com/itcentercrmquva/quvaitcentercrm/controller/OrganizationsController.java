@@ -32,5 +32,7 @@ public class OrganizationsController {
         return userService.getUserIDs(request);
     }
 
-
-}
+    @GetMapping("org-user")
+    public ResponseEntity<List<Long>> getUserId(HttpServletRequest request) {
+        return userService.getUserIDs(request);
+    }}

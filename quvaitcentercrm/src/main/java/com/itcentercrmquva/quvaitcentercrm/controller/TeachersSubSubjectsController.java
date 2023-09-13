@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/teachers-ss/")
+@RequestMapping("api/teachers/")
 @AllArgsConstructor
 public class TeachersSubSubjectsController {
 
@@ -23,7 +23,7 @@ public class TeachersSubSubjectsController {
         return teachersSubSubjectsService.create(physicalStuffId, ids, request);
     }
 
-    @GetMapping("list")
+    @GetMapping("")
     public ResponseEntity<List<TeachersSubSubjectsProjection>> list(HttpServletRequest request) {
         return teachersSubSubjectsService.getList(request);
     }
