@@ -18,7 +18,7 @@ public class TeachersSubSubjectsController {
 
     private final TeachersSubSubjectsService teachersSubSubjectsService;
 
-    @PostMapping("create")
+    @PostMapping("ss-create")
     public ResponseEntity<ResponseResult> create(@RequestParam("physical_stuff") Long physicalStuffId, @RequestParam("org_ss") String ids, HttpServletRequest request) {
         return teachersSubSubjectsService.create(physicalStuffId, ids, request);
     }
