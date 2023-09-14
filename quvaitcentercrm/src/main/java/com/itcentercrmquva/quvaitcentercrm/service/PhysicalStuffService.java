@@ -1,10 +1,7 @@
 package com.itcentercrmquva.quvaitcentercrm.service;
 
 import com.itcentercrmquva.quvaitcentercrm.dto.ResponseResult;
-import com.itcentercrmquva.quvaitcentercrm.entity.PhysicalFace;
-import com.itcentercrmquva.quvaitcentercrm.entity.PhysicalStuff;
-import com.itcentercrmquva.quvaitcentercrm.entity.StuffCategory;
-import com.itcentercrmquva.quvaitcentercrm.entity.Users;
+import com.itcentercrmquva.quvaitcentercrm.entity.*;
 import com.itcentercrmquva.quvaitcentercrm.projection.PhysicalStuffByCategoryProjection;
 import com.itcentercrmquva.quvaitcentercrm.projection.PhysicalStuffProjection;
 import com.itcentercrmquva.quvaitcentercrm.repository.*;
@@ -12,9 +9,11 @@ import com.itcentercrmquva.quvaitcentercrm.security.JWTGenerator;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,6 +26,10 @@ public class PhysicalStuffService {
     private final StringToDateCheckerService dateService;
     private final PhysicalFaceRepository physicalFaceRepository;
     private final StuffCategoryRepository stuffCategoryRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepository;
+    private final PhysicalStuffUserRepository physicalStuffUserRepository;
+
 
     public ResponseEntity<ResponseResult> create(Long fid, Long cid, String startDate, String endDate, HttpServletRequest request){
         Optional<Users> user = userRepository.findByUsername(jwtGenerator.getUsernameFromToken(request.getHeader("Authorization").substring(7)));
@@ -80,5 +83,31 @@ public class PhysicalStuffService {
      public ResponseEntity<List<PhysicalStuffByCategoryProjection>> getPSByCategory(HttpServletRequest request){
          Optional<Users> usersOptional = userRepository.findByUsername(jwtGenerator.getUsernameFromToken(request.getHeader("Authorization").substring(7)));
         return  ResponseEntity.ok(physicalStuffRepository.getPSbyCategory(usersOptional.get().getOrganization()));
+     }
+
+     public ResponseEntity<ResponseResult> linkUserToPhysicalStuff(String username, String password, Long psId, Long roleId, HttpServletRequest request) {
+         Optional<Users> user = userRepository.findByUsername(jwtGenerator.getUsernameFromToken(request.getHeader("Authorization").substring(7)));
+         PhysicalStuffUser psu = new PhysicalStuffUser();
+         Optional<PhysicalStuff> ps =  physicalStuffRepository.findById(psId);
+
+         if(userRepository.existsByUsername(username)){
+             return new  ResponseEntity<>(new ResponseResult(false, "Username mavjud"), HttpStatus.BAD_REQUEST);
+         }
+         Users users = new Users();
+         users.setUsername(username);
+         users.setPassword(passwordEncoder.encode(password));
+         Roles role = roleRepository.findById(roleId).get();
+         users.setRoles(Collections.singleton(role));
+
+         if (ps.isEmpty()) {
+             return new ResponseEntity<>(new ResponseResult(false, "Xodim topilmadi"), HttpStatus.BAD_REQUEST);
+         }
+
+         psu.setPhysicalStuff(ps.get());
+         psu.setSystemUser(users);
+         psu.setUser(user.get());
+         physicalStuffUserRepository.save(psu);
+
+         return new ResponseEntity<>(new ResponseResult(true, "User xodimga bog'landi"), HttpStatus.BAD_REQUEST);
      }
 }

@@ -42,7 +42,8 @@ public class PhysicalStuff {
     @JoinColumn(name = "org_id", referencedColumnName = "id")
     private Organizations organizations;
 
-
-
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "physical_stuff_user_id",referencedColumnName = "id")
+    private PhysicalStuffUser physicalStuffUser;
 
 }
