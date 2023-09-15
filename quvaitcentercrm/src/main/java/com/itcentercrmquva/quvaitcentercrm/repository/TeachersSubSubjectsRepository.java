@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public interface TeachersSubSubjectsRepository extends JpaRepository<TeachersSubSubjects, Long> {
 
-    Optional<OnlyTeacherSubSubjectProjection> findPById(Long id);
+    Optional<OnlyTeacherSubSubjectProjection> findProjectionById(Long id);
 
     @Query("select t from TeachersSubSubjects t where t.organizations.id = ?1")
     List<TeachersSubSubjectsProjection> findByOrganizations_Id(Long id);
