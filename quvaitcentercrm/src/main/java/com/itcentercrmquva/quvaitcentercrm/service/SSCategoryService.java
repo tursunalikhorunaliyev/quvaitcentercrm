@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.LinkedList;
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -22,6 +23,9 @@ public class SSCategoryService {
 
     private final SSCategoryRepository ssCategoryRepository;
 
+    public ResponseEntity<List<SSCategory>> getAll(){
+        return ResponseEntity.ok(ssCategoryRepository.findAll());
+    }
     public ResponseEntity<Object> create(String name) {
         final SSCategory ssCategory = new SSCategory();
         ssCategory.setName(name);

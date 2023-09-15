@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.LinkedList;
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -27,6 +28,10 @@ public class GroupsService {
         groups.setName(name);
         groupsRepository.save(groups);
         return ResponseEntity.ok(true);
+    }
+
+    public ResponseEntity<List<Groups>> getAll(){
+        return ResponseEntity.ok(groupsRepository.findAll());
     }
 
     public ResponseEntity<Object> xlsx(MultipartFile file) {
