@@ -9,6 +9,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.sql.Timestamp;
+import java.util.Date;
 
 @Service
 @AllArgsConstructor
@@ -22,15 +24,15 @@ public class TeacherGroupHistoryService {
         TeacherGroupHistory tgh = new TeacherGroupHistory();
         tgh.setDescription(description);
         tgh.setUpdater(users);
-        tgh.setTgId(tgh.getId());
+        tgh.setTgId(tg.getId());
 
         tgh.setTeachersSubSubjects(tg.getTeachersSubSubjects());
         tgh.setSsCategory(tg.getSsCategory());
         tgh.setGroups(tg.getGroups());
         tgh.setGroupStatus(tg.getGroupStatus());
-        tgh.setTimestamp(tg.getTimestamp());
         tgh.setOrganizations(tg.getOrganizations());
         tgh.setUsers(tg.getUsers());
+        tgh.setTimestamp(tg.getTimestamp());
         teacherGroupHistoryRepo.save(tgh);
     }
 }

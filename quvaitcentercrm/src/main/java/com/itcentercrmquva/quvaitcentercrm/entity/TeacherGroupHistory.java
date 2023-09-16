@@ -31,7 +31,6 @@ public class TeacherGroupHistory {
     @JoinColumn(name = "group_id", referencedColumnName = "id")
     private Groups groups;
 
-
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "group_status_id", referencedColumnName = "id")
     private GroupStatus groupStatus;
@@ -44,7 +43,7 @@ public class TeacherGroupHistory {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private Users users;
 
-    @Column(name = "timestamp", nullable = false, updatable = false, insertable = false)
+    @Column(name = "timestamp", nullable = false)
     public Timestamp timestamp;
 
     @Column()

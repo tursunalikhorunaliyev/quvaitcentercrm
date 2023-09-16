@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -24,6 +25,7 @@ public class TeacherGroupService {
     private final GroupStatusRepository groupStatusRepository;
     private final SSCategoryRepository sSCategoryRepository;
     private final TeachersSubSubjectsRepository teachersSubSubjectsRepository;
+    private final TeacherGroupHistoryService teacherGroupHistoryService;
 
     public ResponseEntity<TeachersGroupProjection> getTeacherGroup(Long tgId) {
         return ResponseEntity.ok(teachersGroupRepository.findProjectionById(tgId).get());
@@ -44,5 +46,22 @@ public class TeacherGroupService {
         tg.setTeachersSubSubjects(teachersSubSubjectsRepository.findById(tssId).get());
         teachersGroupRepository.save(tg);
         return new ResponseEntity<>(new ResponseResult(true, "Saqlandi"), HttpStatus.OK);
+    }
+
+    public ResponseEntity<ResponseResult> update(String description, Long tgId, Long gId, Long gsId, Long sscId, Long tssId, HttpServletRequest request) {
+        Users users = jwtGenerator.getUserFromRequest(request);
+        TeachersGroup tg = teachersGroupRepository.findById(tgId).orElse(null);
+        if (tg == null) {
+            return new ResponseEntity<>(new ResponseResult(false, "Topilmadi"), HttpStatus.OK);
+        }
+        tg.setId(tgId);
+        tg.setUsers(users);
+        tg.setOrganizations(users.getOrganization());
+        tg.setGroups(groupsRepository.findById(gId).get());
+        tg.setGroupStatus(groupStatusRepository.findById(gsId).get());
+        tg.setSsCategory(sSCategoryRepository.findById(sscId).get());
+        tg.setTeachersSubSubjects(teachersSubSubjectsRepository.findById(tssId).get());
+        teacherGroupHistoryService.save(description, tg, request);
+        return new ResponseEntity<>(new ResponseResult(true, "O'zgartirildi"), HttpStatus.OK);
     }
 }
