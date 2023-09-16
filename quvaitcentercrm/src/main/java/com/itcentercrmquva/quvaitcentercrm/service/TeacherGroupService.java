@@ -30,7 +30,7 @@ public class TeacherGroupService {
     }
 
     public ResponseEntity<List<TeachersGroupProjection>> getAllTeacherGroup() {
-        return ResponseEntity.ok(teachersGroupRepository.findAllProjection());
+        return ResponseEntity.ok(teachersGroupRepository.findProjectionsAll());
     }
 
     public ResponseEntity<ResponseResult> create(Long gId, Long gsId, Long sscId, Long tssId, HttpServletRequest request) {
