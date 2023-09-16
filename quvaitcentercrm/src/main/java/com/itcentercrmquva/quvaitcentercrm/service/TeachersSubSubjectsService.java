@@ -65,7 +65,7 @@ public class TeachersSubSubjectsService {
     }
 
     public ResponseEntity<OnlyTeacherSubSubjectProjection> get(Long id) {
-        OnlyTeacherSubSubjectProjection tssp = teachersSubSubjectsRepository.findPById(id).orElse(null);
+        OnlyTeacherSubSubjectProjection tssp = teachersSubSubjectsRepository.findProjectionById(id).orElse(null);
         return ResponseEntity.ok(tssp);
     }
 
